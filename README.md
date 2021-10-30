@@ -16,5 +16,4 @@ nosql 大作业项目
 - [Contributing](#contributing)
 - [License](#license)
 
-hello world
 
