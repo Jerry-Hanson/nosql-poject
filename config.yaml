@@ -1,0 +1,4 @@
+address : "127.0.0.1"
+port : 3456
+buffersize : 1024
+max_connection : 12
