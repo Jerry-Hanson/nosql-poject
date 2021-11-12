@@ -2,12 +2,13 @@ import datetime
 import pymysql
 
 class UserDao:
-    def __init__(self, host, user, password, database):
-        self.db=pymysql.connect(host="127.0.0.1",
-                                user="root",
-                                password="123456",
-                                database="test",
-                                port=3306)
+    def __init__(self, host, user, password, database, port):
+        self.db=pymysql.connect(host=host,
+                                user=user,
+                                password=password,
+                                database=database,
+                                port=port)
+
     # 关于好友的操作
     def creatUserTable(self, username):
         # 创建游标对象
@@ -32,7 +33,6 @@ class UserDao:
             # 关闭数据库连接
             self.db.close()
 
-
     def addFriend(self, username, friendUsername):
         """ 向以用户名为表名的表中插入一条friendUsername记录， 并获取时间， 插入时间"""
         cur = self.db.cursor()
@@ -51,7 +51,6 @@ class UserDao:
             cur.close()
             # 关闭数据库连接
             self.db.close()
-
 
     def isFriendExists(self, username, friendUsername):
         """ 查询某一个用户是否有某一个好友"""
@@ -74,7 +73,6 @@ class UserDao:
             cur.close()
             # 关闭数据库连接
             self.db.close()
-
 
     def deleteFriend(self, username, friendUsername):
         """ 删除某个用户的某一个好友"""

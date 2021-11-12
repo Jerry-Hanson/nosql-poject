@@ -19,6 +19,7 @@ mysql_username : "root"
 mysql_host : "127.0.0.1"
 mysql_pwd : "root"
 mysql_database : "test" 
+mysql_port : 3306
 
 mongodb_address : "mongodb://localhost:27017/"
 mongodb_database : "test"
