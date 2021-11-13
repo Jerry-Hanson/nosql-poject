@@ -76,8 +76,7 @@ class UserDao:
     def changeNickname(self, username, nickName):
         """ """
         username = input('输入用户名:').strip()
-        sql = 'update user set nickName=%s where username=%s'
-        update_data = ['new_nickName']
+        sql = "update user set nickName = 值1 where username = 'huhu'"
         rows = self.cursor.execute(sql, nickName)
         res = self.cursor.fetchone()
         self.cursor.close()
