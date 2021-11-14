@@ -4,6 +4,8 @@ from socket import *
 import threading
 import json
 from utils.ConfigFileReader import ConfigFileReader
+from sql.UserDao import UserDao
+
 
 config = ConfigFileReader("config/server_config.yaml")
 address = config.info['server_address']
@@ -24,70 +26,56 @@ user_client = []
 group_list = [['tcp群'], ['兼职群'], ['同学群'], ['学习资料群']]
 
 
-def login(logindata, clientsock):
-    for x in range(0, user_l):
-        print("登录请求" + str(logindata[1]))
-        if len(user_client) >= 1:
-            ul = len(user_client)
-
-            if str(user_list[x][0]) == str(logindata[1]) and str(user_list[x][1]) != str(logindata[2]):
-                login_bkinfo = 'flase-pw'
-                clientsock.send(login_bkinfo.encode())
-                break
-            elif str(user_list[x][0]) == str(logindata[1]) and str(user_list[x][1]) == str(logindata[2]):
-                for user_cl in range(0, ul):
-                    if str(user_client[user_cl][0]) == str(logindata[1]):
-                        login_bkinfo = 'flase-login'
-                        clientsock.send(login_bkinfo.encode())
-                        break
-                    elif user_cl == ul - 1:
-                        usercl = []
-                        usercl.append(logindata[1])
-                        usercl.append(clientsock)
-                        login_bkinfo = 'true'
-                        user_client.append(usercl)
-                        print(user_client)
-                        clientsock.send(login_bkinfo.encode())
-                break
-            elif x == user_l - 1:
-                login_bkinfo = 'flase-user'
-                clientsock.send(login_bkinfo.encode())
-
+def login(username, password):
+    """
+    将状态分成一下几种， 用户名不存在， 密码错误， （用户已登录）, 登录成功
+    :param username:
+    :param password:
+    :return:
+        "UserNotExist",
+        "WrongPwd",
+        "AlreadyLogin"，
+        “Success”
+    """
+    dao = UserDao(host = config.info['mysql_host'],
+                  port = config.info['mysql_port'],
+                  user = config.info['mysql_username'],
+                  password = config.info['mysql_pwd'],
+                  database = config.info['mysql_database'])
+    res = dao.getInfo(username)
+    if res is not None:
+        # 用户名存在
+        if res['password'] == password:
+            return "Success"
         else:
-
-            if str(user_list[x][0]) == str(logindata[1]) and str(user_list[x][1]) != str(logindata[2]):
-                login_bkinfo = 'flase-pw'
-                clientsock.send(login_bkinfo.encode())
-                break
-            elif str(user_list[x][0]) == str(logindata[1]) and str(user_list[x][1]) == str(logindata[2]):
-                usercl = []
-                usercl.append(logindata[1])
-                usercl.append(clientsock)
-                login_bkinfo = 'true'
-                user_client.append(usercl)
-                print(user_client)
-                clientsock.send(login_bkinfo.encode())
-                break
-            elif x == user_l - 1:
-                login_bkinfo = 'flase-user'
-                clientsock.send(login_bkinfo.encode())
+            return "WrongPwd"
+    else:
+        return "UserNotExist"
 
 
 def tcplink(clientsock, clientaddress):
     # group_l = len(group_list)
     while True:
         recvdata = clientsock.recv(buffsize).decode('utf-8')
+
         if recvdata == '':
             # sock被关闭
             print(clientaddress, "shutdown")
             break
+
         info_dict = json.loads(recvdata)
         info_type = info_dict['type']
+
+        # 登录
         if info_type == "login":
             username = info_dict['username']
             password = info_dict['password']
             print(username, password)
             # TODO 数据查询
+            status = login(username, password)
+            # 将状态返回
+            clientsock.send(status.encode())
+
 
         # if str(logindata[0])=='login':
         #     login(logindata,clientsock)

@@ -7,7 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QApplication,QMessageBox
+from PyQt5.QtWidgets import QApplication, QMessageBox
 import sys
 from socket import *
 import threading
@@ -27,7 +27,7 @@ class Ui_MainWindow(object):
         self.s.connect((address, port))
 
     def setupUi(self, MainWindow):
-        self.MainWindow=MainWindow
+        self.MainWindow = MainWindow
         self.MainWindow.setObjectName("MainWindow")
         self.MainWindow.resize(360, 340)
         self.MainWindow.setMinimumSize(QtCore.QSize(360, 340))
@@ -36,7 +36,7 @@ class Ui_MainWindow(object):
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("image/QQicon.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.MainWindow.setWindowIcon(icon)
-        #MainWindow.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        # MainWindow.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.MainWindow.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -58,19 +58,17 @@ class Ui_MainWindow(object):
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(70, 260, 221, 41))
         self.pushButton.setStyleSheet("background-color: rgb(7, 85, 240);\n"
-"color: rgb(255, 255, 255);")
+                                      "color: rgb(255, 255, 255);")
         self.pushButton.setObjectName("pushButton")
         self.pushButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
         # set button click event
         self.pushButton.clicked.connect(self.login)
 
-
-
         self.formFrame = QtWidgets.QFrame(self.centralwidget)
         self.formFrame.setGeometry(QtCore.QRect(0, -1, 361, 151))
         self.formFrame.setStyleSheet("border-color: rgb(0, 85, 255);\n"
-"background-image: url(image/loginicon.jpg);")
+                                     "background-image: url(image/loginicon.jpg);")
         self.formFrame.setObjectName("formFrame")
         self.formLayout = QtWidgets.QFormLayout(self.formFrame)
         self.formLayout.setObjectName("formLayout")
@@ -89,12 +87,10 @@ class Ui_MainWindow(object):
         self.label_3.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.label_3.setObjectName("label_3")
 
-
-
-        #MainWindow.setCentralWidget(self.centralwidget)
+        # MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
-        #MainWindow.setStatusBar(self.statusbar)
+        # MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(self.MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -107,49 +103,54 @@ class Ui_MainWindow(object):
         self.label_2.setText(_translate("MainWindow", "密码："))
         self.label_3.setText(_translate("MainWindow", "用户注册"))
 
-
     def login(self):
         """
         点击登录按钮
         :return:
         """
-        self.user=self.lineEdit.text()
-        password=self.lineEdit_2.text()
-        if self.user=='':
-            QMessageBox.information(self.MainWindow,'提示','QQ账号不能为空!', QMessageBox.Ok | QMessageBox.Close, QMessageBox.Close)
+        self.user = self.lineEdit.text()
+        password = self.lineEdit_2.text()
+        if self.user == '':
+            QMessageBox.information(self.MainWindow, '提示', 'QQ账号不能为空!', QMessageBox.Ok | QMessageBox.Close,
+                                    QMessageBox.Close)
         else:
-            if password=='':
-                QMessageBox.information(self.MainWindow, '提示', '密码不能为空!', QMessageBox.Ok | QMessageBox.Close, QMessageBox.Close)
+            if password == '':
+                QMessageBox.information(self.MainWindow, '提示', '密码不能为空!', QMessageBox.Ok | QMessageBox.Close,
+                                        QMessageBox.Close)
             else:
-                login_info_dict = {"type":"login", "username":self.user, "password":password}
+                login_info_dict = {"type": "login", "username": self.user, "password": password}
                 login_info = json.dumps(login_info_dict)
                 self.s.send(login_info.encode())
-                # self.login_recv()
-
+                self.login_recv()
 
     # login的响应窗口
     def login_recv(self):
-        recv_info=self.s.recv(self.buffsize).decode('utf-8')
+        recv_info = self.s.recv(self.buffsize).decode('utf-8')
         print(recv_info)
-        if str(recv_info)=='true':
-            QMessageBox.information(self.MainWindow, '登录成功', '登录成功!', QMessageBox.Ok | QMessageBox.Close, QMessageBox.Close)
-            #QtCore.QCoreApplication.instance().quit()
+        if str(recv_info) == 'Success':
+            QMessageBox.information(self.MainWindow, '登录成功', '登录成功!', QMessageBox.Ok | QMessageBox.Close,
+                                    QMessageBox.Close)
+            # QtCore.QCoreApplication.instance().quit()
             # 打开QQ界面
             # widget.hide()
             # widget1.show()
             # 设置用户名
             # ui1.label.setText(self.user)
 
-        elif str(recv_info)=='flase-user':
-            QMessageBox.information(self.MainWindow, '失败', '登录失败，无此账号!!', QMessageBox.Ok | QMessageBox.Close,QMessageBox.Close)
-        elif str(recv_info)=='flase-pw':
-            QMessageBox.information(self.MainWindow, '失败', '登录失败，密码错误!!', QMessageBox.Ok | QMessageBox.Close,QMessageBox.Close)
-        elif str(recv_info)=='flase-login':
-            QMessageBox.information(self.MainWindow, '失败', '此账号已登录!', QMessageBox.Ok | QMessageBox.Close,QMessageBox.Close)
+        elif str(recv_info) == 'UserNotExist':
+            QMessageBox.information(self.MainWindow, '失败', '登录失败，无此账号!!', QMessageBox.Ok | QMessageBox.Close,
+                                    QMessageBox.Close)
+        elif str(recv_info) == 'WrongPwd':
+            QMessageBox.information(self.MainWindow, '失败', '登录失败，密码错误!!', QMessageBox.Ok | QMessageBox.Close,
+                                    QMessageBox.Close)
+        # elif str(recv_info) == 'flase-login':
+        #     QMessageBox.information(self.MainWindow, '失败', '此账号已登录!', QMessageBox.Ok | QMessageBox.Close,
+        #                             QMessageBox.Close)
+
 
 if __name__ == "__main__":
-
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     widget = QtWidgets.QWidget()
     ui = Ui_MainWindow()
@@ -163,5 +164,3 @@ if __name__ == "__main__":
     # ui1.setupUit(widget1)
 
     sys.exit(app.exec_())
-
-
