@@ -13,14 +13,14 @@ class Ui_Dialog(object):
         self.s = s
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(170, 382)
+        Dialog.resize(193, 400)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(Dialog.sizePolicy().hasHeightForWidth())
         Dialog.setSizePolicy(sizePolicy)
         Dialog.setMinimumSize(QtCore.QSize(0, 0))
-        Dialog.setMaximumSize(QtCore.QSize(12345, 12345))
+        Dialog.setMaximumSize(QtCore.QSize(1234, 1234))
         self.frame = QtWidgets.QFrame(Dialog)
         self.frame.setGeometry(QtCore.QRect(0, 0, 401, 41))
         self.frame.setStyleSheet("background-color: rgb(0, 170, 255);")
@@ -54,7 +54,7 @@ class Ui_Dialog(object):
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_2.setObjectName("frame_2")
         self.frame_3 = QtWidgets.QFrame(self.frame_2)
-        self.frame_3.setGeometry(QtCore.QRect(0, 71, 171, 271))
+        self.frame_3.setGeometry(QtCore.QRect(0, 71, 201, 301))
         font = QtGui.QFont()
         font.setUnderline(False)
         self.frame_3.setFont(font)
@@ -350,7 +350,7 @@ class Ui_Dialog(object):
         self.toolButton_8.setObjectName("toolButton_8")
         self.verticalLayout.addWidget(self.toolButton_8)
         self.frame_4 = QtWidgets.QFrame(self.frame_2)
-        self.frame_4.setGeometry(QtCore.QRect(0, 40, 171, 31))
+        self.frame_4.setGeometry(QtCore.QRect(0, 40, 201, 31))
         font = QtGui.QFont()
         font.setUnderline(False)
         self.frame_4.setFont(font)
@@ -368,7 +368,7 @@ class Ui_Dialog(object):
         self.pushButton_5.setObjectName("pushButton_5")
         self.horizontalLayout.addWidget(self.pushButton_5)
         self.frame_5 = QtWidgets.QFrame(self.frame_2)
-        self.frame_5.setGeometry(QtCore.QRect(0, 0, 171, 41))
+        self.frame_5.setGeometry(QtCore.QRect(0, 0, 201, 41))
         font = QtGui.QFont()
         font.setUnderline(False)
         self.frame_5.setFont(font)
@@ -484,13 +484,3 @@ class Ui_Dialog(object):
         self.pushButton_5.setText(_translate("Dialog", "群聊"))
         self.pushButton_2.setText(_translate("Dialog", "搜索"))
 
-if __name__ == "__main__":
-	import sys
-	QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
-
-	app =  QtWidgets.QApplication(sys.argv)
-	MainWindow = QtWidgets.QMainWindow()
-	ui = Ui_Dialog()
-	ui.setupUi(MainWindow)
-	MainWindow.show()
-	sys.exit(app.exec_())

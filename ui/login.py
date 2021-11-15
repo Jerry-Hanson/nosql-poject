@@ -135,7 +135,7 @@ class Ui_MainWindow(object):
         if str(recv_info) == 'Success':
             QMessageBox.information(self.MainWindow, '登录成功', '登录成功!', QMessageBox.Ok | QMessageBox.Close,
                                     QMessageBox.Close)
-            QtCore.QCoreApplication.instance().quit()
+            # QtCore.QCoreApplication.instance().quit()
             # 打开QQ界面
             widget.hide()
             widget1.show()
