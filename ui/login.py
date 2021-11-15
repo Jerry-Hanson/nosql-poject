@@ -135,10 +135,10 @@ class Ui_MainWindow(object):
         if str(recv_info) == 'Success':
             QMessageBox.information(self.MainWindow, '登录成功', '登录成功!', QMessageBox.Ok | QMessageBox.Close,
                                     QMessageBox.Close)
-            # QtCore.QCoreApplication.instance().quit()
+            QtCore.QCoreApplication.instance().quit()
             # 打开QQ界面
-            # widget.hide()
-            # widget1.show()
+            widget.hide()
+            widget1.show()
             # 设置用户名
             # ui1.label.setText(self.user)
 
@@ -165,11 +165,11 @@ if __name__ == "__main__":
     widget.show()
 
     # QQ界面的widget
-    # import QQ
-    # widget1 = QtWidgets.QWidget()
-    # # 把sock传到新的窗口中
-    # ui1 = QQ.Ui_MainWindowt(ui.s)
-    # ui1.setupUit(widget1)
+    from hylb import Ui_Dialog
+    widget1 = QtWidgets.QWidget()
+    # 把sock传到新的窗口中
+    ui1 = Ui_Dialog(ui.s)
+    ui1.setupUi(widget1)
 
     # register 界面的widget
     from register import Ui_Form

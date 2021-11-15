@@ -6,9 +6,27 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>617</height>
+    <width>170</width>
+    <height>382</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>12345</width>
+    <height>12345</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
@@ -19,7 +37,7 @@
      <x>0</x>
      <y>0</y>
      <width>401</width>
-     <height>61</height>
+     <height>41</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -34,10 +52,10 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>160</x>
-      <y>10</y>
+      <x>40</x>
+      <y>7</y>
       <width>91</width>
-      <height>41</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
@@ -58,41 +76,33 @@
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>0</y>
-      <width>61</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/QQ-1/QQ-3.jpg&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>330</x>
-      <y>-10</y>
-      <width>72</width>
-      <height>81</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/QQ-1/QQ-5.jpg&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
   </widget>
   <widget class="QFrame" name="frame_2">
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>60</y>
-     <width>401</width>
-     <height>561</height>
+     <y>40</y>
+     <width>200</width>
+     <height>400</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>200</width>
+     <height>400</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>200</width>
+     <height>400</height>
+    </size>
    </property>
    <property name="font">
     <font>
@@ -113,9 +123,9 @@ border-color: rgb(230, 230, 230);</string>
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>250</y>
-      <width>401</width>
-      <height>311</height>
+      <y>71</y>
+      <width>171</width>
+      <height>271</height>
      </rect>
     </property>
     <property name="font">
@@ -948,13 +958,54 @@ border-color: rgb(230, 230, 230);</string>
      </item>
     </layout>
    </widget>
+   <widget class="QFrame" name="frame_4">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>40</y>
+      <width>171</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <underline>false</underline>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);
+border-color: rgb(230, 230, 230);</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="pushButton_3">
+       <property name="text">
+        <string>好友</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_5">
+       <property name="text">
+        <string>群聊</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
    <widget class="QFrame" name="frame_5">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>401</width>
-      <height>61</height>
+      <width>171</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="font">
@@ -975,10 +1026,10 @@ border-color: rgb(230, 230, 230);</string>
     <widget class="QLineEdit" name="lineEdit_2">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>18</x>
        <y>10</y>
-       <width>341</width>
-       <height>41</height>
+       <width>81</width>
+       <height>21</height>
       </rect>
      </property>
      <property name="font">
@@ -1011,10 +1062,10 @@ border-color: rgb(230, 230, 230);</string>
     <widget class="QPushButton" name="pushButton_2">
      <property name="geometry">
       <rect>
-       <x>290</x>
+       <x>98</x>
        <y>10</y>
-       <width>71</width>
-       <height>41</height>
+       <width>51</width>
+       <height>21</height>
       </rect>
      </property>
      <property name="palette">
@@ -1236,135 +1287,6 @@ border-color: rgb(230, 230, 230);</string>
      </property>
      <property name="flat">
       <bool>false</bool>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QFrame" name="frame_4">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>200</y>
-      <width>401</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <underline>false</underline>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);
-border-color: rgb(230, 230, 230);</string>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QPushButton" name="pushButton_3">
-       <property name="text">
-        <string>好友</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_4">
-       <property name="text">
-        <string>分组</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_5">
-       <property name="text">
-        <string>群聊</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QFrame" name="frame_6">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>70</y>
-      <width>401</width>
-      <height>121</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <underline>false</underline>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);
-border-color: rgb(230, 230, 230);</string>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-    <widget class="QToolButton" name="toolButton">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>20</y>
-       <width>361</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>宋体</family>
-       <pointsize>12</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>新朋友</string>
-     </property>
-     <property name="toolButtonStyle">
-      <enum>Qt::ToolButtonTextBesideIcon</enum>
-     </property>
-     <property name="autoRaise">
-      <bool>true</bool>
-     </property>
-     <property name="arrowType">
-      <enum>Qt::RightArrow</enum>
-     </property>
-    </widget>
-    <widget class="QToolButton" name="toolButton_2">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>70</y>
-       <width>361</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>宋体</family>
-       <pointsize>12</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>群通知</string>
-     </property>
-     <property name="toolButtonStyle">
-      <enum>Qt::ToolButtonTextBesideIcon</enum>
-     </property>
-     <property name="autoRaise">
-      <bool>true</bool>
-     </property>
-     <property name="arrowType">
-      <enum>Qt::RightArrow</enum>
      </property>
     </widget>
    </widget>
