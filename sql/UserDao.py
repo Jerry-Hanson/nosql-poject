@@ -77,8 +77,14 @@ class UserDao:
         cursor.close()
         return True
 
+    def createUser(self, username, password, gender, age, nickName):
+        cursor = self.db.cursor()
+        sql = "insert into user values(%s, %s, %s, {}, %s)"
+        cursor.execute(sql.format(age), (username, password, gender, nickName))
+        self.db.commit()
+        cursor.close()
 
 if __name__ == "__main__":
     dao = UserDao(host="localhost", port=3306, user='root', password='root',
                   database='nosql')
-    print(dao.changeAge('jerry', 120))
+    print(dao.createUser("fuck", "jerry", "male", 12, "jerry"))

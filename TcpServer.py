@@ -52,6 +52,28 @@ def login(username, password):
     else:
         return "UserNotExist"
 
+def register(username, password, gender, age, nickName):
+    """
+    注册用户， 并返回状态码
+    :param username:
+    :param password:
+    :param gender:
+    :param age:
+    :param nickName:
+    :return:
+        "userExists":用户已经存在，
+        ”Success“:成功
+    """
+    dao = UserDao(host=config.info['mysql_host'],
+                  port=config.info['mysql_port'],
+                  user=config.info['mysql_username'],
+                  password=config.info['mysql_pwd'],
+                  database=config.info['mysql_database'])
+    if dao.isUserExists(username):
+        return "userExists"
+    else:
+        dao.createUser(username, password, gender, age, nickName)
+        return "Success"
 
 def tcplink(clientsock, clientaddress):
     # group_l = len(group_list)
@@ -62,7 +84,7 @@ def tcplink(clientsock, clientaddress):
             # sock被关闭
             print(clientaddress, "shutdown")
             break
-
+        print(recvdata)
         info_dict = json.loads(recvdata)
         info_type = info_dict['type']
 
@@ -75,6 +97,17 @@ def tcplink(clientsock, clientaddress):
             status = login(username, password)
             # 将状态返回
             clientsock.send(status.encode())
+
+        if info_type == "register":
+            username = info_dict['username']
+            password = info_dict['password']
+            gender = info_dict['gender']
+            age = info_dict['age']
+            nickName = info_dict['nickName']
+            status = register(username, password, gender, age, nickName)
+            # 将状态返回
+            clientsock.send(status.encode())
+
 
 
         # if str(logindata[0])=='login':

@@ -79,13 +79,15 @@ class Ui_MainWindow(object):
         self.label_2.setGeometry(QtCore.QRect(60, 220, 31, 16))
         self.label_2.setObjectName("label_2")
 
-        self.label_3 = QtWidgets.QLabel(self.centralwidget)
-        self.label_3.setGeometry(QtCore.QRect(10, 306, 61, 16))
+        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_2.setGeometry(QtCore.QRect(10, 305, 56, 17))
         font = QtGui.QFont()
-        font.setPointSize(8)
-        self.label_3.setFont(font)
-        self.label_3.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.label_3.setObjectName("label_3")
+        font.setFamily("Arial")
+        font.setPointSize(7)
+        self.pushButton_2.setFont(font)
+        self.pushButton_2.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.pushButton_2.clicked.connect(self.register)
 
         # MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -101,7 +103,10 @@ class Ui_MainWindow(object):
         self.pushButton.setText(_translate("MainWindow", "登录"))
         self.label.setText(_translate("MainWindow", "账号："))
         self.label_2.setText(_translate("MainWindow", "密码："))
-        self.label_3.setText(_translate("MainWindow", "用户注册"))
+        self.pushButton_2.setText(_translate("MainWindow", "注册账号"))
+
+    def register(self):
+       widget2.show()
 
     def login(self):
         """
@@ -152,15 +157,24 @@ if __name__ == "__main__":
     import sys
 
     app = QtWidgets.QApplication(sys.argv)
+
     widget = QtWidgets.QWidget()
     ui = Ui_MainWindow()
     ui.setupUi(widget)
     ui.tcp_start()
     widget.show()
+
+    # QQ界面的widget
     # import QQ
     # widget1 = QtWidgets.QWidget()
     # # 把sock传到新的窗口中
     # ui1 = QQ.Ui_MainWindowt(ui.s)
     # ui1.setupUit(widget1)
+
+    # register 界面的widget
+    from register import Ui_Form
+    widget2 = QtWidgets.QWidget()
+    ui2 = Ui_Form(ui.s)
+    ui2.setupUi((widget2))
 
     sys.exit(app.exec_())
