@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>276</width>
-    <height>400</height>
+    <width>280</width>
+    <height>621</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -123,9 +123,9 @@ border-color: rgb(230, 230, 230);</string>
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>71</y>
+      <y>101</y>
       <width>281</width>
-      <height>301</height>
+      <height>481</height>
      </rect>
     </property>
     <property name="font">
@@ -964,7 +964,7 @@ border-color: rgb(230, 230, 230);</string>
       <x>0</x>
       <y>40</y>
       <width>281</width>
-      <height>31</height>
+      <height>61</height>
      </rect>
     </property>
     <property name="font">

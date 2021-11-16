@@ -6,7 +6,7 @@ from pymongo.errors import DuplicateKeyError
 
 # 首先，需要一个类，把对数据库的增删改查操作封装为一个接口
 # 该类的名名字随便期
-class Mongo(object):
+class MongodbDao(object):
     # 初始化，就是连接数据库
     # port:必须是个整数，不能加引号变成字符串
     def __init__(self, host='localhost', port=27017):
@@ -69,7 +69,7 @@ class Mongo(object):
 
 
 if __name__ == '__main__':
-    mongo = Mongo()
+    mongo = MongodbDao()
     data = [
         # 如果指定了插入时的id值，就会用你指定的值，如果没有指定id值，插入后就会自动有个ObjectId("5bb9bc6aa236ce29f4898035")
         {

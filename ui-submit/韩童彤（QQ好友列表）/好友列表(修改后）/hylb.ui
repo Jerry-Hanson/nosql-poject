@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>369</width>
     <height>617</height>
    </rect>
   </property>
@@ -68,20 +68,24 @@
      </rect>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/tx/QQ-3.jpg&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=\&quot;./QQ-3.jpg\&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>330</x>
-      <y>-10</y>
-      <width>72</width>
-      <height>81</height>
+      <x>300</x>
+      <y>10</y>
+      <width>56</width>
+      <height>41</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background-￼image:url(QQ-5.jpg);
+</string>
+    </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/tx/QQ-5.jpg&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string/>
     </property>
    </widget>
   </widget>
@@ -547,7 +551,7 @@ border-color: rgb(230, 230, 230);</string>
           <string>AI</string>
          </property>
          <property name="icon">
-          <iconset resource="tuku.qrc">
+          <iconset>
            <normaloff>:/tx/20140707211410_GiSLf.jpeg</normaloff>:/tx/20140707211410_GiSLf.jpeg</iconset>
          </property>
         </item>
@@ -561,7 +565,7 @@ border-color: rgb(230, 230, 230);</string>
           <string>巴库</string>
          </property>
          <property name="icon">
-          <iconset resource="tuku.qrc">
+          <iconset>
            <normaloff>:/tx/20191225154057_YYLWT.thumb.700_0.jpeg</normaloff>:/tx/20191225154057_YYLWT.thumb.700_0.jpeg</iconset>
          </property>
         </item>
@@ -575,7 +579,7 @@ border-color: rgb(230, 230, 230);</string>
           <string>瞅瞅</string>
          </property>
          <property name="icon">
-          <iconset resource="tuku.qrc">
+          <iconset>
            <normaloff>:/tx/duitang_1624179999782.png.JPG</normaloff>:/tx/duitang_1624179999782.png.JPG</iconset>
          </property>
         </item>
@@ -589,7 +593,7 @@ border-color: rgb(230, 230, 230);</string>
           <string>当当</string>
          </property>
          <property name="icon">
-          <iconset resource="tuku.qrc">
+          <iconset>
            <normaloff>:/tx/20190512215221_wKmP4.thumb.700_0.jpeg.JPG</normaloff>:/tx/20190512215221_wKmP4.thumb.700_0.jpeg.JPG</iconset>
          </property>
         </item>
@@ -675,7 +679,7 @@ border-color: rgb(230, 230, 230);</string>
           <string>小明</string>
          </property>
          <property name="icon">
-          <iconset resource="tuku.qrc">
+          <iconset>
            <normaloff>:/tx/duitang_1624179999782.png.JPG</normaloff>:/tx/duitang_1624179999782.png.JPG</iconset>
          </property>
         </item>
@@ -684,7 +688,7 @@ border-color: rgb(230, 230, 230);</string>
           <string>小红</string>
          </property>
          <property name="icon">
-          <iconset resource="tuku.qrc">
+          <iconset>
            <normaloff>:/tx/20190512215221_wKmP4.thumb.700_0.jpeg.JPG</normaloff>:/tx/20190512215221_wKmP4.thumb.700_0.jpeg.JPG</iconset>
          </property>
         </item>
@@ -698,7 +702,7 @@ border-color: rgb(230, 230, 230);</string>
           <string>小郑</string>
          </property>
          <property name="icon">
-          <iconset resource="tuku.qrc">
+          <iconset>
            <normaloff>:/tx/20140707211410_GiSLf.jpeg</normaloff>:/tx/20140707211410_GiSLf.jpeg</iconset>
          </property>
         </item>
@@ -707,7 +711,7 @@ border-color: rgb(230, 230, 230);</string>
           <string>小邵</string>
          </property>
          <property name="icon">
-          <iconset resource="tuku.qrc">
+          <iconset>
            <normaloff>:/tx/20191225154053_rxAXj.thumb.700_0.jpeg</normaloff>:/tx/20191225154053_rxAXj.thumb.700_0.jpeg</iconset>
          </property>
         </item>
@@ -716,7 +720,7 @@ border-color: rgb(230, 230, 230);</string>
           <string>小马</string>
          </property>
          <property name="icon">
-          <iconset resource="tuku.qrc">
+          <iconset>
            <normaloff>:/tx/duitang_1623223793046.png.JPG</normaloff>:/tx/duitang_1623223793046.png.JPG</iconset>
          </property>
         </item>
@@ -725,7 +729,7 @@ border-color: rgb(230, 230, 230);</string>
           <string>小罗</string>
          </property>
          <property name="icon">
-          <iconset resource="tuku.qrc">
+          <iconset>
            <normaloff>:/tx/20200803190636_kwysn.jpg.JPG</normaloff>:/tx/20200803190636_kwysn.jpg.JPG</iconset>
          </property>
         </item>
@@ -739,7 +743,7 @@ border-color: rgb(230, 230, 230);</string>
           <string>小杨</string>
          </property>
          <property name="icon">
-          <iconset resource="tuku.qrc">
+          <iconset>
            <normaloff>:/tx/20191225154053_rxAXj.thumb.700_0.jpeg</normaloff>:/tx/20191225154053_rxAXj.thumb.700_0.jpeg</iconset>
          </property>
         </item>
@@ -748,7 +752,7 @@ border-color: rgb(230, 230, 230);</string>
           <string>小秋</string>
          </property>
          <property name="icon">
-          <iconset resource="tuku.qrc">
+          <iconset>
            <normaloff>:/tx/20191225154057_YYLWT.thumb.700_0.jpeg</normaloff>:/tx/20191225154057_YYLWT.thumb.700_0.jpeg</iconset>
          </property>
         </item>
@@ -757,7 +761,7 @@ border-color: rgb(230, 230, 230);</string>
           <string>小李</string>
          </property>
          <property name="icon">
-          <iconset resource="tuku.qrc">
+          <iconset>
            <normaloff>:/tx/20191225154056_VWLiH.thumb.700_0.jpeg</normaloff>:/tx/20191225154056_VWLiH.thumb.700_0.jpeg</iconset>
          </property>
         </item>
@@ -771,7 +775,7 @@ border-color: rgb(230, 230, 230);</string>
           <string>爷爷</string>
          </property>
          <property name="icon">
-          <iconset resource="tuku.qrc">
+          <iconset>
            <normaloff>:/tx/20140707211410_GiSLf.jpeg</normaloff>:/tx/20140707211410_GiSLf.jpeg</iconset>
          </property>
         </item>
@@ -780,7 +784,7 @@ border-color: rgb(230, 230, 230);</string>
           <string>奶奶</string>
          </property>
          <property name="icon">
-          <iconset resource="tuku.qrc">
+          <iconset>
            <normaloff>:/tx/QQ-3.jpg</normaloff>:/tx/QQ-3.jpg</iconset>
          </property>
         </item>
@@ -789,7 +793,7 @@ border-color: rgb(230, 230, 230);</string>
           <string>妈妈</string>
          </property>
          <property name="icon">
-          <iconset resource="tuku.qrc">
+          <iconset>
            <normaloff>:/tx/20191225154057_YYLWT.thumb.700_0.jpeg</normaloff>:/tx/20191225154057_YYLWT.thumb.700_0.jpeg</iconset>
          </property>
         </item>
@@ -798,7 +802,7 @@ border-color: rgb(230, 230, 230);</string>
           <string>哥哥</string>
          </property>
          <property name="icon">
-          <iconset resource="tuku.qrc">
+          <iconset>
            <normaloff>:/tx/duitang_1624179999782.png.JPG</normaloff>:/tx/duitang_1624179999782.png.JPG</iconset>
          </property>
         </item>
@@ -807,7 +811,7 @@ border-color: rgb(230, 230, 230);</string>
           <string>爸爸</string>
          </property>
          <property name="icon">
-          <iconset resource="tuku.qrc">
+          <iconset>
            <normaloff>:/tx/20191225154053_rxAXj.thumb.700_0.jpeg</normaloff>:/tx/20191225154053_rxAXj.thumb.700_0.jpeg</iconset>
          </property>
         </item>
@@ -947,7 +951,7 @@ border-color: rgb(230, 230, 230);</string>
          <string>我的电脑</string>
         </property>
         <property name="icon">
-         <iconset resource="tuku.qrc">
+         <iconset>
           <normaloff>:/tx/QQ-3.jpg</normaloff>:/tx/QQ-3.jpg</iconset>
         </property>
        </item>

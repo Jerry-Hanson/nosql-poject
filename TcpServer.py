@@ -26,6 +26,14 @@ user_client = []
 group_list = [['tcp群'], ['兼职群'], ['同学群'], ['学习资料群']]
 
 
+def getDao():
+    dao = UserDao(host=config.info['mysql_host'],
+                  port=config.info['mysql_port'],
+                  user=config.info['mysql_username'],
+                  password=config.info['mysql_pwd'],
+                  database=config.info['mysql_database'])
+    return dao
+
 def login(username, password):
     """
     将状态分成一下几种， 用户名不存在， 密码错误， （用户已登录）, 登录成功
@@ -37,11 +45,7 @@ def login(username, password):
         "AlreadyLogin"，
         “Success”
     """
-    dao = UserDao(host = config.info['mysql_host'],
-                  port = config.info['mysql_port'],
-                  user = config.info['mysql_username'],
-                  password = config.info['mysql_pwd'],
-                  database = config.info['mysql_database'])
+    dao = getDao()
     res = dao.getInfo(username)
     if res is not None:
         # 用户名存在
@@ -51,6 +55,11 @@ def login(username, password):
             return "WrongPwd"
     else:
         return "UserNotExist"
+
+def search(username):
+    dao = getDao()
+    info = dao.getInfo(username)
+    return info
 
 def register(username, password, gender, age, nickName):
     """
@@ -64,11 +73,7 @@ def register(username, password, gender, age, nickName):
         "userExists":用户已经存在，
         ”Success“:成功
     """
-    dao = UserDao(host=config.info['mysql_host'],
-                  port=config.info['mysql_port'],
-                  user=config.info['mysql_username'],
-                  password=config.info['mysql_pwd'],
-                  database=config.info['mysql_database'])
+    dao = getDao()
     if dao.isUserExists(username):
         return "userExists"
     else:
@@ -108,7 +113,15 @@ def tcplink(clientsock, clientaddress):
             # 将状态返回
             clientsock.send(status.encode())
 
-
+        if info_type == "search":
+            username = info_dict['username']
+            info = search(username)
+            if info is None:
+                status = "UserNotExist"
+            else:
+                status = json.dumps(info)
+            print(status)
+            clientsock.send(status.encode())
 
         # if str(logindata[0])=='login':
         #     login(logindata,clientsock)

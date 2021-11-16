@@ -34,7 +34,7 @@ class Ui_MainWindow(object):
         self.MainWindow.setMaximumSize(QtCore.QSize(360, 340))
         MainWindow.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("image/QQicon.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("images/QQicon.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.MainWindow.setWindowIcon(icon)
         # MainWindow.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.MainWindow.setStyleSheet("background-color: rgb(255, 255, 255);")
@@ -68,7 +68,7 @@ class Ui_MainWindow(object):
         self.formFrame = QtWidgets.QFrame(self.centralwidget)
         self.formFrame.setGeometry(QtCore.QRect(0, -1, 361, 151))
         self.formFrame.setStyleSheet("border-color: rgb(0, 85, 255);\n"
-                                     "background-image: url(image/loginicon.jpg);")
+                                     "background-image: url(images/loginicon.jpg);")
         self.formFrame.setObjectName("formFrame")
         self.formLayout = QtWidgets.QFormLayout(self.formFrame)
         self.formLayout.setObjectName("formLayout")
@@ -176,5 +176,7 @@ if __name__ == "__main__":
     widget2 = QtWidgets.QWidget()
     ui2 = Ui_Form(ui.s)
     ui2.setupUi((widget2))
+
+
 
     sys.exit(app.exec_())

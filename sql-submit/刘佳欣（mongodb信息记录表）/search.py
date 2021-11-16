@@ -25,6 +25,7 @@ class Mongo(object):
         return results
     def __del__(self):
         self.client.close()
+
 if __name__ == '__main__':
     mongo = Mongo()
     # 定义查询条件，查询条件必须是个字典

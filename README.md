@@ -75,7 +75,23 @@ mongodb_database : "test"
   //"receiver":""
   ```
 
+- search user by username
 
+  ```json
+  "type":"search"
+  "username":"xxx"
+  ```
+
+  ```json
+  
+  [
+      {"username":"xxx", "gender":"xxx", "nickName":"xxx", "age":20},
+      {}
+  	
+  ]
+  ```
+
+  
 
 ## 数据表
 
