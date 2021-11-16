@@ -1,0 +1,1059 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>617</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QFrame" name="frame">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>401</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(0, 170, 255);</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>10</y>
+      <width>91</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>微软雅黑</family>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; color:#ffffff;&quot;&gt;联系人&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::AutoText</enum>
+    </property>
+    <property name="scaledContents">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>0</y>
+      <width>61</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/tx/QQ-3.jpg&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>-10</y>
+      <width>72</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/tx/QQ-5.jpg&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QFrame" name="frame_2">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>60</y>
+     <width>401</width>
+     <height>561</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <underline>false</underline>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(222, 222, 222);
+border-color: rgb(230, 230, 230);</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QFrame" name="frame_5">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>401</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <underline>false</underline>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);
+border-color: rgb(230, 230, 230);</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QLineEdit" name="lineEdit_2">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>10</y>
+       <width>341</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>新宋体</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(230, 230, 230);
+selection-background-color: rgb(255, 255, 255);
+border-color: rgb(230, 230, 230);</string>
+     </property>
+     <property name="inputMask">
+      <string/>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="maxLength">
+      <number>32768</number>
+     </property>
+     <property name="frame">
+      <bool>false</bool>
+     </property>
+     <property name="cursorPosition">
+      <number>0</number>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_2">
+     <property name="geometry">
+      <rect>
+       <x>290</x>
+       <y>10</y>
+       <width>71</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="palette">
+      <palette>
+       <active>
+        <colorrole role="WindowText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Button">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>0</red>
+           <green>170</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Text">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="ButtonText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Base">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>0</red>
+           <green>170</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Window">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>0</red>
+           <green>170</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="ToolTipText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </active>
+       <inactive>
+        <colorrole role="WindowText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Button">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>0</red>
+           <green>170</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Text">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="ButtonText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Base">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>0</red>
+           <green>170</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Window">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>0</red>
+           <green>170</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="ToolTipText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </inactive>
+       <disabled>
+        <colorrole role="WindowText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>120</red>
+           <green>120</green>
+           <blue>120</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Button">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>0</red>
+           <green>170</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Text">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>120</red>
+           <green>120</green>
+           <blue>120</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="ButtonText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>120</red>
+           <green>120</green>
+           <blue>120</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Base">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>0</red>
+           <green>170</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Window">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>0</red>
+           <green>170</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="ToolTipText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </disabled>
+      </palette>
+     </property>
+     <property name="font">
+      <font>
+       <family>等线</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(0, 170, 255);</string>
+     </property>
+     <property name="text">
+      <string>搜索</string>
+     </property>
+     <property name="autoDefault">
+      <bool>true</bool>
+     </property>
+     <property name="default">
+      <bool>false</bool>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QFrame" name="frame_6">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>70</y>
+      <width>401</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <underline>false</underline>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);
+border-color: rgb(230, 230, 230);</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QToolButton" name="toolButton">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>20</y>
+       <width>361</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>宋体</family>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>新朋友</string>
+     </property>
+     <property name="toolButtonStyle">
+      <enum>Qt::ToolButtonTextBesideIcon</enum>
+     </property>
+     <property name="autoRaise">
+      <bool>true</bool>
+     </property>
+     <property name="arrowType">
+      <enum>Qt::RightArrow</enum>
+     </property>
+    </widget>
+    <widget class="QToolButton" name="toolButton_2">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>70</y>
+       <width>361</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>宋体</family>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>群通知</string>
+     </property>
+     <property name="toolButtonStyle">
+      <enum>Qt::ToolButtonTextBesideIcon</enum>
+     </property>
+     <property name="autoRaise">
+      <bool>true</bool>
+     </property>
+     <property name="arrowType">
+      <enum>Qt::RightArrow</enum>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>200</y>
+      <width>401</width>
+      <height>361</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>好友</string>
+     </attribute>
+     <widget class="QFrame" name="frame_8">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>401</width>
+        <height>341</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <underline>false</underline>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);
+border-color: rgb(230, 230, 230);</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QTreeWidget" name="treeWidget_2">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>401</width>
+         <height>331</height>
+        </rect>
+       </property>
+       <column>
+        <property name="text">
+         <string>好友</string>
+        </property>
+       </column>
+       <item>
+        <property name="text">
+         <string>A</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>AI</string>
+         </property>
+         <property name="icon">
+          <iconset resource="tuku.qrc">
+           <normaloff>:/tx/20140707211410_GiSLf.jpeg</normaloff>:/tx/20140707211410_GiSLf.jpeg</iconset>
+         </property>
+        </item>
+       </item>
+       <item>
+        <property name="text">
+         <string>B</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>巴库</string>
+         </property>
+         <property name="icon">
+          <iconset resource="tuku.qrc">
+           <normaloff>:/tx/20191225154057_YYLWT.thumb.700_0.jpeg</normaloff>:/tx/20191225154057_YYLWT.thumb.700_0.jpeg</iconset>
+         </property>
+        </item>
+       </item>
+       <item>
+        <property name="text">
+         <string>C</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>瞅瞅</string>
+         </property>
+         <property name="icon">
+          <iconset resource="tuku.qrc">
+           <normaloff>:/tx/duitang_1624179999782.png.JPG</normaloff>:/tx/duitang_1624179999782.png.JPG</iconset>
+         </property>
+        </item>
+       </item>
+       <item>
+        <property name="text">
+         <string>D</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>当当</string>
+         </property>
+         <property name="icon">
+          <iconset resource="tuku.qrc">
+           <normaloff>:/tx/20190512215221_wKmP4.thumb.700_0.jpeg.JPG</normaloff>:/tx/20190512215221_wKmP4.thumb.700_0.jpeg.JPG</iconset>
+         </property>
+        </item>
+       </item>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="title">
+      <string>分组</string>
+     </attribute>
+     <widget class="QFrame" name="frame_7">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>401</width>
+        <height>341</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <underline>false</underline>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);
+border-color: rgb(230, 230, 230);</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QTreeWidget" name="treeWidget">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>401</width>
+         <height>331</height>
+        </rect>
+       </property>
+       <property name="rootIsDecorated">
+        <bool>true</bool>
+       </property>
+       <property name="uniformRowHeights">
+        <bool>false</bool>
+       </property>
+       <property name="itemsExpandable">
+        <bool>true</bool>
+       </property>
+       <property name="sortingEnabled">
+        <bool>false</bool>
+       </property>
+       <property name="animated">
+        <bool>true</bool>
+       </property>
+       <property name="allColumnsShowFocus">
+        <bool>false</bool>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+       <property name="headerHidden">
+        <bool>false</bool>
+       </property>
+       <property name="expandsOnDoubleClick">
+        <bool>true</bool>
+       </property>
+       <column>
+        <property name="text">
+         <string>分组</string>
+        </property>
+       </column>
+       <item>
+        <property name="text">
+         <string>特别关心</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>小明</string>
+         </property>
+         <property name="icon">
+          <iconset resource="tuku.qrc">
+           <normaloff>:/tx/duitang_1624179999782.png.JPG</normaloff>:/tx/duitang_1624179999782.png.JPG</iconset>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>小红</string>
+         </property>
+         <property name="icon">
+          <iconset resource="tuku.qrc">
+           <normaloff>:/tx/20190512215221_wKmP4.thumb.700_0.jpeg.JPG</normaloff>:/tx/20190512215221_wKmP4.thumb.700_0.jpeg.JPG</iconset>
+         </property>
+        </item>
+       </item>
+       <item>
+        <property name="text">
+         <string>我的好友</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>小郑</string>
+         </property>
+         <property name="icon">
+          <iconset resource="tuku.qrc">
+           <normaloff>:/tx/20140707211410_GiSLf.jpeg</normaloff>:/tx/20140707211410_GiSLf.jpeg</iconset>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>小邵</string>
+         </property>
+         <property name="icon">
+          <iconset resource="tuku.qrc">
+           <normaloff>:/tx/20191225154053_rxAXj.thumb.700_0.jpeg</normaloff>:/tx/20191225154053_rxAXj.thumb.700_0.jpeg</iconset>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>小马</string>
+         </property>
+         <property name="icon">
+          <iconset resource="tuku.qrc">
+           <normaloff>:/tx/duitang_1623223793046.png.JPG</normaloff>:/tx/duitang_1623223793046.png.JPG</iconset>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>小罗</string>
+         </property>
+         <property name="icon">
+          <iconset resource="tuku.qrc">
+           <normaloff>:/tx/20200803190636_kwysn.jpg.JPG</normaloff>:/tx/20200803190636_kwysn.jpg.JPG</iconset>
+         </property>
+        </item>
+       </item>
+       <item>
+        <property name="text">
+         <string>同学</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>小杨</string>
+         </property>
+         <property name="icon">
+          <iconset resource="tuku.qrc">
+           <normaloff>:/tx/20191225154053_rxAXj.thumb.700_0.jpeg</normaloff>:/tx/20191225154053_rxAXj.thumb.700_0.jpeg</iconset>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>小秋</string>
+         </property>
+         <property name="icon">
+          <iconset resource="tuku.qrc">
+           <normaloff>:/tx/20191225154057_YYLWT.thumb.700_0.jpeg</normaloff>:/tx/20191225154057_YYLWT.thumb.700_0.jpeg</iconset>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>小李</string>
+         </property>
+         <property name="icon">
+          <iconset resource="tuku.qrc">
+           <normaloff>:/tx/20191225154056_VWLiH.thumb.700_0.jpeg</normaloff>:/tx/20191225154056_VWLiH.thumb.700_0.jpeg</iconset>
+         </property>
+        </item>
+       </item>
+       <item>
+        <property name="text">
+         <string>家人</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>爷爷</string>
+         </property>
+         <property name="icon">
+          <iconset resource="tuku.qrc">
+           <normaloff>:/tx/20140707211410_GiSLf.jpeg</normaloff>:/tx/20140707211410_GiSLf.jpeg</iconset>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>奶奶</string>
+         </property>
+         <property name="icon">
+          <iconset resource="tuku.qrc">
+           <normaloff>:/tx/QQ-3.jpg</normaloff>:/tx/QQ-3.jpg</iconset>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>妈妈</string>
+         </property>
+         <property name="icon">
+          <iconset resource="tuku.qrc">
+           <normaloff>:/tx/20191225154057_YYLWT.thumb.700_0.jpeg</normaloff>:/tx/20191225154057_YYLWT.thumb.700_0.jpeg</iconset>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>哥哥</string>
+         </property>
+         <property name="icon">
+          <iconset resource="tuku.qrc">
+           <normaloff>:/tx/duitang_1624179999782.png.JPG</normaloff>:/tx/duitang_1624179999782.png.JPG</iconset>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>爸爸</string>
+         </property>
+         <property name="icon">
+          <iconset resource="tuku.qrc">
+           <normaloff>:/tx/20191225154053_rxAXj.thumb.700_0.jpeg</normaloff>:/tx/20191225154053_rxAXj.thumb.700_0.jpeg</iconset>
+         </property>
+        </item>
+       </item>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>群聊</string>
+     </attribute>
+     <widget class="QFrame" name="frame_9">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>401</width>
+        <height>341</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <underline>false</underline>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);
+border-color: rgb(230, 230, 230);</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QTreeWidget" name="treeWidget_3">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>411</width>
+         <height>351</height>
+        </rect>
+       </property>
+       <column>
+        <property name="text">
+         <string>群聊</string>
+        </property>
+       </column>
+       <item>
+        <property name="text">
+         <string>置顶群聊</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>111</string>
+         </property>
+        </item>
+       </item>
+       <item>
+        <property name="text">
+         <string>未命名群聊</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>222</string>
+         </property>
+        </item>
+       </item>
+       <item>
+        <property name="text">
+         <string>我创建的群聊</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>333</string>
+         </property>
+        </item>
+       </item>
+       <item>
+        <property name="text">
+         <string>我管理的群聊</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>444</string>
+         </property>
+        </item>
+       </item>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_4">
+     <attribute name="title">
+      <string>设备</string>
+     </attribute>
+     <widget class="QFrame" name="frame_10">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>401</width>
+        <height>341</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <underline>false</underline>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);
+border-color: rgb(230, 230, 230);</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QTreeWidget" name="treeWidget_4">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>411</width>
+         <height>351</height>
+        </rect>
+       </property>
+       <column>
+        <property name="text">
+         <string>设备</string>
+        </property>
+       </column>
+       <item>
+        <property name="text">
+         <string>我的电脑</string>
+        </property>
+        <property name="icon">
+         <iconset resource="tuku.qrc">
+          <normaloff>:/tx/QQ-3.jpg</normaloff>:/tx/QQ-3.jpg</iconset>
+        </property>
+       </item>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_5">
+     <attribute name="title">
+      <string>通讯录</string>
+     </attribute>
+     <widget class="QFrame" name="frame_11">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>401</width>
+        <height>341</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <underline>false</underline>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);
+border-color: rgb(230, 230, 230);</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QTreeWidget" name="treeWidget_5">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>411</width>
+         <height>351</height>
+        </rect>
+       </property>
+       <column>
+        <property name="text">
+         <string>通讯录</string>
+        </property>
+       </column>
+       <item>
+        <property name="text">
+         <string>小李</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>小丽</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>小康</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>小红</string>
+        </property>
+       </item>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_6">
+     <attribute name="title">
+      <string>订阅号</string>
+     </attribute>
+     <widget class="QFrame" name="frame_12">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>401</width>
+        <height>341</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <underline>false</underline>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);
+border-color: rgb(230, 230, 230);</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources>
+  <include location="tuku.qrc"/>
+ </resources>
+ <connections/>
+</ui>
