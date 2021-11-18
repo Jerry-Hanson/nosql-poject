@@ -8,7 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from friendSearch import Ui_Form
-
+import json
 
 class Ui_Dialog(object):
     def __init__(self, s, username, bufferSize = 1024):
@@ -207,26 +207,31 @@ class Ui_Dialog(object):
         self.treeWidget_2 = QtWidgets.QTreeWidget(self.frame_8)
         self.treeWidget_2.setGeometry(QtCore.QRect(0, 0, 401, 331))
         self.treeWidget_2.setObjectName("treeWidget_2")
-        item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget_2)
-        item_1 = QtWidgets.QTreeWidgetItem(item_0)
+        # 下面分别是四个主节点和其分支
+        # self.first_item0 = QtWidgets.QTreeWidgetItem(self.treeWidget_2)
+        # item_1 = QtWidgets.QTreeWidgetItem(self.first_item0)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("images/20140707211410_GiSLf.jpeg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        item_1.setIcon(0, icon)
-        item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget_2)
-        item_1 = QtWidgets.QTreeWidgetItem(item_0)
+        # item_1.setIcon(0, icon)
+        # item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget_2)
+        # item_1 = QtWidgets.QTreeWidgetItem(item_0)
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap("images/20191225154057_YYLWT.thumb.700_0.jpeg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        item_1.setIcon(0, icon1)
-        item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget_2)
-        item_1 = QtWidgets.QTreeWidgetItem(item_0)
+        # item_1.setIcon(0, icon1)
+        # item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget_2)
+        # item_1 = QtWidgets.QTreeWidgetItem(item_0)
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("images/duitang_1624179999782.png.JPG"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        item_1.setIcon(0, icon2)
-        item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget_2)
-        item_1 = QtWidgets.QTreeWidgetItem(item_0)
+        # icon2.addPixmap(QtGui.QPixmap("images/duitang_1624179999782.png.JPG"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        # item_1.setIcon(0, icon2)
+        # item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget_2)
+        # item_1 = QtWidgets.QTreeWidgetItem(item_0)
         icon3 = QtGui.QIcon()
         icon3.addPixmap(QtGui.QPixmap("images/20190512215221_wKmP4.thumb.700_0.jpeg.JPG"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        item_1.setIcon(0, icon3)
+        # item_1.setIcon(0, icon3)
+
+
+
+
         self.tabWidget.addTab(self.tab, "")
         self.tab_2 = QtWidgets.QWidget()
         self.tab_2.setObjectName("tab_2")
@@ -376,6 +381,30 @@ class Ui_Dialog(object):
 
         self.pushButton.clicked.connect(self.searchFriend)
 
+    def showFriends(self):
+        """
+        刷新一次好友列表
+        :param username:
+        :return:
+        """
+        _translate = QtCore.QCoreApplication.translate
+        self.treeWidget_2.clear()
+        first_item0 = self.treeWidget_2.headerItem().setText(0, _translate("Dialog", "好友"))
+        # first_item0 = self.treeWidget_2.headerItem()
+        first_item0 = QtWidgets.QTreeWidgetItem(self.treeWidget_2)
+        first_item0.setText( 0, _translate("Dialog", "好友"))
+        # 初始化所有的好友
+        # 发送请求拿到所有的好友
+        info_dict = {"type": "searchFriend", "username": self.username}
+        info_str = json.dumps(info_dict)
+        self.s.send(info_str.encode())
+        # 获取返回的信息
+        recv_info = self.s.recv(self.bufferSize).decode('utf-8')
+        friend_list = json.loads(recv_info)
+        for friend in friend_list:
+            item = QtWidgets.QTreeWidgetItem(first_item0)
+            item.setText(0, _translate("Dialog", friend))
+
 
     def searchFriend(self):
         self.widget3.show()
@@ -389,17 +418,22 @@ class Ui_Dialog(object):
         self.toolButton.setToolTip(_translate("Dialog", "<html><head/><body><p><br/></p></body></html>"))
         self.toolButton.setText(_translate("Dialog", "新朋友"))
         self.toolButton_2.setText(_translate("Dialog", "群通知"))
-        self.treeWidget_2.headerItem().setText(0, _translate("Dialog", "好友"))
+
+        # treeWidget 1
+        # self.treeWidget_2.headerItem().setText(0, _translate("Dialog", "分组"))
         __sortingEnabled = self.treeWidget_2.isSortingEnabled()
         self.treeWidget_2.setSortingEnabled(False)
-        self.treeWidget_2.topLevelItem(0).setText(0, _translate("Dialog", "A"))
-        self.treeWidget_2.topLevelItem(0).child(0).setText(0, _translate("Dialog", "AI"))
-        self.treeWidget_2.topLevelItem(1).setText(0, _translate("Dialog", "B"))
-        self.treeWidget_2.topLevelItem(1).child(0).setText(0, _translate("Dialog", "巴库"))
-        self.treeWidget_2.topLevelItem(2).setText(0, _translate("Dialog", "C"))
-        self.treeWidget_2.topLevelItem(2).child(0).setText(0, _translate("Dialog", "瞅瞅"))
-        self.treeWidget_2.topLevelItem(3).setText(0, _translate("Dialog", "D"))
-        self.treeWidget_2.topLevelItem(3).child(0).setText(0, _translate("Dialog", "当当"))
+        # self.treeWidget_2.topLevelItem(0).setText(0, _translate("Dialog", "好友"))
+        self.showFriends()
+
+
+        # self.treeWidget_2.topLevelItem(0).child(0).setText(0, _translate("Dialog", "AI"))
+        # self.treeWidget_2.topLevelItem(1).setText(0, _translate("Dialog", "B"))
+        # self.treeWidget_2.topLevelItem(1).child(0).setText(0, _translate("Dialog", "巴库"))
+        # self.treeWidget_2.topLevelItem(2).setText(0, _translate("Dialog", "C"))
+        # self.treeWidget_2.topLevelItem(2).child(0).setText(0, _translate("Dialog", "瞅瞅"))
+        # self.treeWidget_2.topLevelItem(3).setText(0, _translate("Dialog", "D"))
+        # self.treeWidget_2.topLevelItem(3).child(0).setText(0, _translate("Dialog", "当当"))
         self.treeWidget_2.setSortingEnabled(__sortingEnabled)
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("Dialog", "好友"))
         self.treeWidget.setSortingEnabled(False)

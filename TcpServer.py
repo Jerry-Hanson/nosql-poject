@@ -93,6 +93,20 @@ def addFriend(send_user, recv_user):
     dao.addFriend(recv_user, send_user)
 
 
+def searchFriend(username):
+    """
+    查询一个用户的所有好友
+    :param username:
+    :return:
+    """
+    dao = getDao()
+    friends = dao.getFriends(username)
+    friend_list = []
+    for friend in friends:
+        friend_list.append(friend[0])
+    return friend_list
+
+
 def tcplink(clientsock, clientaddress):
     # group_l = len(group_list)
     while True:
@@ -127,6 +141,7 @@ def tcplink(clientsock, clientaddress):
             clientsock.send(status.encode())
 
         if info_type == "search":
+            # 根据指定的username查询所有的个人信息
             username = info_dict['username']
             info = search(username)
             if info is None:
@@ -139,10 +154,19 @@ def tcplink(clientsock, clientaddress):
         if info_type == "addFriend":
             send_user = info_dict['send_user']
             recv_user = info_dict['recv_user']
+            # log
             print("addFriend", send_user, recv_user)
             # 两个人都要有添加好友的操作
             addFriend(send_user, recv_user)
             addFriend(recv_user, send_user)
+
+        if info_type == "searchFriend":
+            username = info_dict['username']
+            # log
+            print("searchFriend", username)
+            friend_list = searchFriend(username)
+            info_str = json.dumps(friend_list)
+            clientsock.send(info_str.encode())
 
         # if str(logindata[0])=='login':
         #     login(logindata,clientsock)

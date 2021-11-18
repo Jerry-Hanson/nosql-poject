@@ -100,7 +100,16 @@ class UserDao:
         self.db.commit()
         cursor.close()
 
+    def getFriends(self, username):
+        cursor = self.db.cursor()
+        sql = "select friendUsername from {}"
+        cursor.execute(sql.format(username))
+        res = cursor.fetchall()
+        self.db.commit()
+        cursor.close()
+        return res
+
 if __name__ == "__main__":
     dao = UserDao(host="localhost", port=3306, user='root', password='root',
                   database='nosql')
-    dao.addFriend("jerry", "hurry")
+    print(dao.getFriends("jerry"))

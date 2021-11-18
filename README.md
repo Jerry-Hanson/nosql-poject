@@ -78,8 +78,8 @@ mongodb_database : "test"
 - search user by username
 
   ```json
-  "type":"search"
-  "username":"xxx"
+    "type":"search"
+    "username":"xxx"
   ```
 
   ```json
@@ -91,13 +91,17 @@ mongodb_database : "test"
   ]
   ```
   
-  - 添加好友
-    ```json
-      "type":"addFriend"
-      "recv_user":"userA"
-      "send_user":"userB"
-    ```
-
+- 添加好友
+  ```json
+    "type":"addFriend"
+    "recv_user":"userA"
+    "send_user":"userB"
+  ```
+- 查询好友
+  ```json
+  "type":"searchFriend"
+  "username":"userA"
+  ``` 
   
 
 ## 数据表
