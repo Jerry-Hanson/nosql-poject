@@ -90,6 +90,13 @@ mongodb_database : "test"
   	
   ]
   ```
+  
+  - 添加好友
+    ```json
+      "type":"addFriend"
+      "recv_user":"userA"
+      "send_user":"userB"
+    ```
 
   
 

@@ -8,14 +8,17 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import json
-
+from sql.UserDao import UserDao
+from utils.ConfigFileReader import ConfigFileReader
 from PyQt5.QtWidgets import QMessageBox
 
+config = ConfigFileReader("../config/server_config.yaml")
 
 class Ui_Form(object):
-    def __init__(self, s, bufferSize=1024):
+    def __init__(self, s, username, bufferSize=1024):
         self.s = s
         self.bufferSize = bufferSize
+        self.username = username  # 先在登录的用户
 
     def setupUi(self, Form):
         self.Form = Form
@@ -37,8 +40,6 @@ class Ui_Form(object):
         self.listWidget = QtWidgets.QListWidget(Form)
         self.listWidget.setGeometry(QtCore.QRect(20, 111, 361, 121))
         self.listWidget.setObjectName("listWidget")
-        item = QtWidgets.QListWidgetItem()
-        self.listWidget.addItem(item)
         self.label_2 = QtWidgets.QLabel(Form)
         self.label_2.setGeometry(QtCore.QRect(20, 100, 41, 9))
         self.label_2.setObjectName("label_2")
@@ -55,21 +56,30 @@ class Ui_Form(object):
         self.label.setText(_translate("Form", "请输入需要查询的用户的用户名"))
         __sortingEnabled = self.listWidget.isSortingEnabled()
         self.listWidget.setSortingEnabled(False)
-        item = self.listWidget.item(0)
-        item.setText(_translate("Form", "好友1"))
         self.listWidget.setSortingEnabled(__sortingEnabled)
         self.label_2.setText(_translate("Form", "查询结果"))
         self.listWidget.itemClicked.connect(self.itemClickedFun)
 
 
     def itemClickedFun(self, item):
-        username = item.text().split('\t')[0]
+        send_user = item.text().split('\t')[0]
+        ret = QMessageBox.information(self.Form, '提示', '您确定要加' + send_user + "为好友吗？", QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel,
+                                QMessageBox.No)
         # 发送请求信息
+        if ret == QMessageBox.Yes:
+            info_dict = {"type":"addFriend", "send_user":self.username, "recv_user":send_user}
+            info_str = json.dumps(info_dict)
+            self.s.send(info_str.encode())
+            self.Form.hide()
 
 
     def search(self):
         self.listWidget.clear()  # 清空结果框
         username = self.lineEdit.text()
+        if username == self.username:
+            QMessageBox.information(self.Form, '失败', '只能添加自己以外的用户', QMessageBox.Ok | QMessageBox.Close,
+                                    QMessageBox.Close)
+            return
         if username == "":
             QMessageBox.information(self.Form, '失败', '输入不能为空', QMessageBox.Ok | QMessageBox.Close,
                                     QMessageBox.Close)
@@ -110,7 +120,7 @@ if __name__ == "__main__":
 
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_Form(None)
+    ui = Ui_Form(None, '')
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())

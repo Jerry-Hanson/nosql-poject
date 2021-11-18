@@ -11,12 +11,14 @@ from friendSearch import Ui_Form
 
 
 class Ui_Dialog(object):
-    def __init__(self, s, bufferSize = 1024):
+    def __init__(self, s, username, bufferSize = 1024):
         self.s = s
         self.bufferSize = bufferSize
+        self.username = username
 
+        # 好友搜索
         self.widget3 = QtWidgets.QWidget()
-        self.ui3 = Ui_Form(s)
+        self.ui3 = Ui_Form(s, self.username)
         self.ui3.setupUi(self.widget3)
 
     def setupUi(self, Dialog):

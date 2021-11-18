@@ -1,5 +1,5 @@
 import pymysql
-
+from datetime import datetime
 
 class UserDao:
     def __init__(self, host, port, user, password, database):
@@ -84,7 +84,23 @@ class UserDao:
         self.db.commit()
         cursor.close()
 
+    def createFriendTable(self, username):
+        cursor = self.db.cursor()
+        sql = "create table {} (friendUsername varchar(32) primary key, addTime varchar(32))"
+        cursor.execute(sql.format(username))
+        self.db.commit()
+        cursor.close()
+
+    def addFriend(self, send_user, recv_user):
+        cursor = self.db.cursor()
+        time_now = datetime.now()
+        time_str = '-'.join([str(time_now.year), str(time_now.month), str(time_now.day)])
+        sql = "insert into {} values(%s, %s)"
+        cursor.execute(sql.format(send_user), (recv_user, time_str, ))
+        self.db.commit()
+        cursor.close()
+
 if __name__ == "__main__":
     dao = UserDao(host="localhost", port=3306, user='root', password='root',
                   database='nosql')
-    print(dao.createUser("fuck", "jerry", "male", 12, "jerry"))
+    dao.addFriend("jerry", "hurry")

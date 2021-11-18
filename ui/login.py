@@ -139,6 +139,10 @@ class Ui_MainWindow(object):
             # 打开QQ界面
             widget.hide()
             widget1.show()
+
+            # 传递username
+            ui1.username = self.user
+            ui1.ui3.username = self.user
             # 设置用户名
             # ui1.label.setText(self.user)
 
@@ -168,7 +172,7 @@ if __name__ == "__main__":
     from hylb import Ui_Dialog
     widget1 = QtWidgets.QWidget()
     # 把sock传到新的窗口中
-    ui1 = Ui_Dialog(ui.s)
+    ui1 = Ui_Dialog(ui.s, "")
     ui1.setupUi(widget1)
 
     # register 界面的widget

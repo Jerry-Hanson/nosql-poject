@@ -78,7 +78,20 @@ def register(username, password, gender, age, nickName):
         return "userExists"
     else:
         dao.createUser(username, password, gender, age, nickName)
+        dao.createFriendTable(username)
         return "Success"
+
+def addFriend(send_user, recv_user):
+    """
+    暂时还没有添加好友验证功能
+    :param send_user:
+    :param recv_user:
+    :return:
+    """
+    dao = getDao()
+    dao.addFriend(send_user, recv_user)
+    dao.addFriend(recv_user, send_user)
+
 
 def tcplink(clientsock, clientaddress):
     # group_l = len(group_list)
@@ -122,6 +135,14 @@ def tcplink(clientsock, clientaddress):
                 status = json.dumps(info)
             print(status)
             clientsock.send(status.encode())
+
+        if info_type == "addFriend":
+            send_user = info_dict['send_user']
+            recv_user = info_dict['recv_user']
+            print("addFriend", send_user, recv_user)
+            # 两个人都要有添加好友的操作
+            addFriend(send_user, recv_user)
+            addFriend(recv_user, send_user)
 
         # if str(logindata[0])=='login':
         #     login(logindata,clientsock)
