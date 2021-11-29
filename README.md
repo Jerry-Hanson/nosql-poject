@@ -19,19 +19,31 @@ nosql 大作业项目
     - mysql 存储用户信息(结构化用户信息)
   
   功能展示:
+
   - 登录
-    ![login](./images/login.png)
-  - 注册
-    ![register](./images/register.png)
-  - 好友列表
-    ![hylb](./images/hylb.png)
-  - 查询好友（添加好友）
-    ![searchFriend](./images/searchFriend.png)
-  - 聊天
-    ![chat](./images/chat.png)
-  - 历史消息查询
-    ![history](./images/history.png)
     
+    ![login](./images/login.png)
+    
+  - 注册
+    
+    ![register](./images/register.png)
+    
+  - 好友列表
+    
+    ![hylb](./images/hylb.png)
+    
+  - 查询好友（添加好友）
+    
+    ![searchFriend](./images/searchFriend.png)
+  
+  - 聊天
+    
+    ![chat](./images/chat.png)
+    
+  - 历史消息查询
+    
+    ![history](./images/history.png)
+
 # install
 
   ```shell
