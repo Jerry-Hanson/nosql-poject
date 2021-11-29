@@ -5,6 +5,7 @@
 # Created by: PyQt5 UI code generator 5.9.2
 #
 # WARNING! All changes made in this file will be lost!
+import time
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import json
@@ -15,10 +16,11 @@ from PyQt5.QtWidgets import QMessageBox
 config = ConfigFileReader("../config/server_config.yaml")
 
 class Ui_Form(object):
-    def __init__(self, s, username, bufferSize=1024):
+    def __init__(self, s, username, parent_ui, bufferSize=1024 ):
         self.s = s
         self.bufferSize = bufferSize
         self.username = username  # 先在登录的用户
+        self.parent_ui = parent_ui
 
     def setupUi(self, Form):
         self.Form = Form
@@ -71,7 +73,8 @@ class Ui_Form(object):
             info_str = json.dumps(info_dict)
             self.s.send(info_str.encode())
             self.Form.hide()
-
+            time.sleep(0.3)
+            self.parent_ui.showFriends()
 
     def search(self):
         self.listWidget.clear()  # 清空结果框
@@ -84,12 +87,11 @@ class Ui_Form(object):
             QMessageBox.information(self.Form, '失败', '输入不能为空', QMessageBox.Ok | QMessageBox.Close,
                                     QMessageBox.Close)
             return
-        # log
-        print("searching " + username)
 
         search_info_dict = {"type": "search", "username": username}
         search_info = json.dumps(search_info_dict)
         self.s.send(search_info.encode())
+        time.sleep(0.3) # 等待服务器相应
         self.recv_msg()
 
     def item(self, text):
@@ -99,28 +101,14 @@ class Ui_Form(object):
         self.listWidget.addItem(item)
 
     def recv_msg(self):
-        recv_info = self.s.recv(self.bufferSize).decode('utf-8')
-        print(recv_info)
-        if recv_info == "UserNotExist":
+
+        if self.friends == "UserNotExist":
             QMessageBox.information(self.Form, '失败', '用户不存在', QMessageBox.Ok | QMessageBox.Close,
                                     QMessageBox.Close)
         else:
-            user_info = json.loads(recv_info)
             username = self.lineEdit.text()
-            age = user_info['age']
-            gender = user_info['gender']
-            nickName = user_info['nickName']
+            age = self.friends['age']
+            gender = self.friends['gender']
+            nickName = self.friends['nickName']
             text = '\t'.join([username, gender, str(age), nickName])
             self.item(text)
-
-if __name__ == "__main__":
-    import sys
-
-    QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
-
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_Form(None, '')
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())

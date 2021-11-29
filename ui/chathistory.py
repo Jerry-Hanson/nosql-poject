@@ -9,13 +9,34 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import json
+from bson import json_util
 
 
 class Ui_Formt2(object):
-    def __init__(self, s, myname, sendname):
+    def __init__(self, myname, sendname, message):
         self.myname = myname
         self.sendname = sendname
-        self.s = s
+        self.message = message
+
+    def quick_sort(self):
+        for i in range(1, len(self.message)):
+            for j in range(i, 0, -1):
+                if self.message[j]['date'] < self.message[j - 1]['date']:
+                    self.message[j], self.message[j - 1] = self.message[j - 1], self.message[j]
+
+
+
+    def show_data(self):
+        for i in self.message:
+            print(type(i), i)
+            if i['send_user'] == self.myname:
+                self.textBrowser.append("<font color='red'>" + str(i['send_user']) + str(i['date']))
+                self.textBrowser.append(i['msg'])
+            else:
+                self.textBrowser.append("<font color='blue'>" + str(i['send_user']) + str(i['date']))
+                self.textBrowser.append(i['msg'])
+
 
     def setupUi(self, Form):
         Form.setObjectName("Form")
@@ -32,13 +53,20 @@ class Ui_Formt2(object):
         self.label.setText("")
         self.label.setPixmap(QtGui.QPixmap("./pics/6.png"))
         self.label.setObjectName("label")
-
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
+        #按时间排序
+        self.quick_sort()
+        #显示数据
+        self.show_data()
+
+
+
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
+
 
 if __name__ == "__main__":
 	import sys

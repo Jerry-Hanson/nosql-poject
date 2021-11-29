@@ -12,8 +12,12 @@ import sys
 from socket import *
 import threading
 import json
-from utils.ConfigFileReader import ConfigFileReader
 
+import sys
+
+sys.path.append("../")
+
+from utils.ConfigFileReader import ConfigFileReader
 
 class Ui_MainWindow(object):
 
@@ -106,7 +110,7 @@ class Ui_MainWindow(object):
         self.pushButton_2.setText(_translate("MainWindow", "注册账号"))
 
     def register(self):
-       widget2.show()
+        widget2.show()
 
     def login(self):
         """
@@ -141,18 +145,14 @@ class Ui_MainWindow(object):
 
             # QQ界面的widget
             from hylb import Ui_Dialog
-            self.widget1 = QtWidgets.QWidget()
+            from hylb import Dialog
+
             # 把sock传到新的窗口中
             self.ui1 = Ui_Dialog(ui.s, self.user)
+            self.widget1 = Dialog(self.ui1)
             self.ui1.setupUi(self.widget1)
 
             self.widget1.show()
-
-            # # 传递username
-            # ui1.username = self.user
-            # ui1.ui3.username = self.user
-            # 设置用户名
-            # ui1.label.setText(self.user)
 
         elif str(recv_info) == 'UserNotExist':
             QMessageBox.information(self.MainWindow, '失败', '登录失败，无此账号!!', QMessageBox.Ok | QMessageBox.Close,
@@ -185,10 +185,9 @@ if __name__ == "__main__":
 
     # register 界面的widget
     from register import Ui_Form
+
     widget2 = QtWidgets.QWidget()
     ui2 = Ui_Form(ui.s)
     ui2.setupUi((widget2))
-
-
 
     sys.exit(app.exec_())

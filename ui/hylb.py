@@ -5,21 +5,53 @@
 # Created by: PyQt5 UI code generator 5.9.2
 #
 # WARNING! All changes made in this file will be lost!
+import time
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QModelIndex
+from PyQt5.QtWidgets import QMainWindow, QDialog
+
 from friendSearch import Ui_Form
 import json
 
+from PyQt5.QtCore import QThread, QObject, pyqtSignal
+from MsgRecvThread import MsgRecvThread
+
+class Dialog(QtWidgets.QWidget):
+    """
+    重写好友列表的Widget， 为了重写closeEvent
+    关闭父窗口的时候关闭所有的子窗口
+    """
+    def __init__(self, ui, parent = None):
+        super(Dialog, self).__init__(parent = parent)
+        self.ui = ui
+
+    def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+        for w in self.ui.widget_dict.values():
+            w.close()
+        a0.accept()
+
+
 class Ui_Dialog(object):
-    def __init__(self, s, username, bufferSize = 1024):
+
+    def closeEvent(self, event: QtGui.QCloseEvent) -> None:
+        for s, w in self.widget_dict.items():
+            w.close()
+        event.accept()
+
+    def __init__(self, s, username, bufferSize=1024):
         self.s = s
         self.bufferSize = bufferSize
         self.username = username
+        # 子窗口dict
+        self.ui_dict = {}
+        self.widget_dict = {}
 
         # 好友搜索
         self.widget3 = QtWidgets.QWidget()
-        self.ui3 = Ui_Form(s, self.username)
+        self.ui3 = Ui_Form(s, self.username, parent_ui = self)
         self.ui3.setupUi(self.widget3)
+        self.msgRecvThread = MsgRecvThread(self.s, self)
 
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
@@ -45,7 +77,7 @@ class Ui_Dialog(object):
         self.pushButton = QtWidgets.QPushButton(self.frame)
         self.pushButton.setGeometry(QtCore.QRect(330, 10, 56, 41))
         self.pushButton.setStyleSheet("background-image:url(./images/QQ-5.jpg);\n"
-"")
+                                      "")
         self.pushButton.setText("")
         self.pushButton.setObjectName("pushButton")
         self.frame_2 = QtWidgets.QFrame(Dialog)
@@ -54,7 +86,7 @@ class Ui_Dialog(object):
         font.setUnderline(False)
         self.frame_2.setFont(font)
         self.frame_2.setStyleSheet("background-color: rgb(222, 222, 222);\n"
-"border-color: rgb(230, 230, 230);")
+                                   "border-color: rgb(230, 230, 230);")
         self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_2.setObjectName("frame_2")
@@ -64,7 +96,7 @@ class Ui_Dialog(object):
         font.setUnderline(False)
         self.frame_5.setFont(font)
         self.frame_5.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-"border-color: rgb(230, 230, 230);")
+                                   "border-color: rgb(230, 230, 230);")
         self.frame_5.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_5.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_5.setObjectName("frame_5")
@@ -75,8 +107,8 @@ class Ui_Dialog(object):
         font.setPointSize(10)
         self.lineEdit_2.setFont(font)
         self.lineEdit_2.setStyleSheet("background-color: rgb(230, 230, 230);\n"
-"selection-background-color: rgb(255, 255, 255);\n"
-"border-color: rgb(230, 230, 230);")
+                                      "selection-background-color: rgb(255, 255, 255);\n"
+                                      "border-color: rgb(230, 230, 230);")
         self.lineEdit_2.setInputMask("")
         self.lineEdit_2.setText("")
         self.lineEdit_2.setMaxLength(32768)
@@ -165,7 +197,7 @@ class Ui_Dialog(object):
         font.setUnderline(False)
         self.frame_6.setFont(font)
         self.frame_6.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-"border-color: rgb(230, 230, 230);")
+                                   "border-color: rgb(230, 230, 230);")
         self.frame_6.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_6.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_6.setObjectName("frame_6")
@@ -200,7 +232,7 @@ class Ui_Dialog(object):
         font.setUnderline(False)
         self.frame_8.setFont(font)
         self.frame_8.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-"border-color: rgb(230, 230, 230);")
+                                   "border-color: rgb(230, 230, 230);")
         self.frame_8.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_8.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_8.setObjectName("frame_8")
@@ -216,7 +248,8 @@ class Ui_Dialog(object):
         # item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget_2)
         # item_1 = QtWidgets.QTreeWidgetItem(item_0)
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("images/20191225154057_YYLWT.thumb.700_0.jpeg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("images/20191225154057_YYLWT.thumb.700_0.jpeg"), QtGui.QIcon.Normal,
+                        QtGui.QIcon.Off)
         # item_1.setIcon(0, icon1)
         # item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget_2)
         # item_1 = QtWidgets.QTreeWidgetItem(item_0)
@@ -226,11 +259,9 @@ class Ui_Dialog(object):
         # item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget_2)
         # item_1 = QtWidgets.QTreeWidgetItem(item_0)
         icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap("images/20190512215221_wKmP4.thumb.700_0.jpeg.JPG"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon3.addPixmap(QtGui.QPixmap("images/20190512215221_wKmP4.thumb.700_0.jpeg.JPG"), QtGui.QIcon.Normal,
+                        QtGui.QIcon.Off)
         # item_1.setIcon(0, icon3)
-
-
-
 
         self.tabWidget.addTab(self.tab, "")
         self.tab_2 = QtWidgets.QWidget()
@@ -241,7 +272,7 @@ class Ui_Dialog(object):
         font.setUnderline(False)
         self.frame_7.setFont(font)
         self.frame_7.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-"border-color: rgb(230, 230, 230);")
+                                   "border-color: rgb(230, 230, 230);")
         self.frame_7.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_7.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_7.setObjectName("frame_7")
@@ -266,7 +297,8 @@ class Ui_Dialog(object):
         item_1.setIcon(0, icon)
         item_1 = QtWidgets.QTreeWidgetItem(item_0)
         icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap("images/20191225154053_rxAXj.thumb.700_0.jpeg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon4.addPixmap(QtGui.QPixmap("images/20191225154053_rxAXj.thumb.700_0.jpeg"), QtGui.QIcon.Normal,
+                        QtGui.QIcon.Off)
         item_1.setIcon(0, icon4)
         item_1 = QtWidgets.QTreeWidgetItem(item_0)
         icon5 = QtGui.QIcon()
@@ -283,7 +315,8 @@ class Ui_Dialog(object):
         item_1.setIcon(0, icon1)
         item_1 = QtWidgets.QTreeWidgetItem(item_0)
         icon7 = QtGui.QIcon()
-        icon7.addPixmap(QtGui.QPixmap("images/20191225154056_VWLiH.thumb.700_0.jpeg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon7.addPixmap(QtGui.QPixmap("images/20191225154056_VWLiH.thumb.700_0.jpeg"), QtGui.QIcon.Normal,
+                        QtGui.QIcon.Off)
         item_1.setIcon(0, icon7)
         item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget)
         item_1 = QtWidgets.QTreeWidgetItem(item_0)
@@ -307,7 +340,7 @@ class Ui_Dialog(object):
         font.setUnderline(False)
         self.frame_9.setFont(font)
         self.frame_9.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-"border-color: rgb(230, 230, 230);")
+                                   "border-color: rgb(230, 230, 230);")
         self.frame_9.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_9.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_9.setObjectName("frame_9")
@@ -331,7 +364,7 @@ class Ui_Dialog(object):
         font.setUnderline(False)
         self.frame_10.setFont(font)
         self.frame_10.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-"border-color: rgb(230, 230, 230);")
+                                    "border-color: rgb(230, 230, 230);")
         self.frame_10.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_10.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_10.setObjectName("frame_10")
@@ -349,7 +382,7 @@ class Ui_Dialog(object):
         font.setUnderline(False)
         self.frame_11.setFont(font)
         self.frame_11.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-"border-color: rgb(230, 230, 230);")
+                                    "border-color: rgb(230, 230, 230);")
         self.frame_11.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_11.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_11.setObjectName("frame_11")
@@ -369,7 +402,7 @@ class Ui_Dialog(object):
         font.setUnderline(False)
         self.frame_12.setFont(font)
         self.frame_12.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-"border-color: rgb(230, 230, 230);")
+                                    "border-color: rgb(230, 230, 230);")
         self.frame_12.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_12.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_12.setObjectName("frame_12")
@@ -392,19 +425,35 @@ class Ui_Dialog(object):
         first_item0 = self.treeWidget_2.headerItem().setText(0, _translate("Dialog", "好友"))
         # first_item0 = self.treeWidget_2.headerItem()
         first_item0 = QtWidgets.QTreeWidgetItem(self.treeWidget_2)
-        first_item0.setText( 0, _translate("Dialog", "好友"))
+        first_item0.setText(0, _translate("Dialog", "好友"))
         # 初始化所有的好友
         # 发送请求拿到所有的好友
         info_dict = {"type": "searchFriend", "username": self.username}
         info_str = json.dumps(info_dict)
         self.s.send(info_str.encode())
+        # 等待服务器相应
+        time.sleep(0.5)
         # 获取返回的信息
-        recv_info = self.s.recv(self.bufferSize).decode('utf-8')
-        friend_list = json.loads(recv_info)
-        for friend in friend_list:
+        # recv_info = self.s.recv(self.bufferSize).decode('utf-8')
+        # friend_list = json.loads(recv_info)
+        for friend in self.friends:
             item = QtWidgets.QTreeWidgetItem(first_item0)
             item.setText(0, _translate("Dialog", friend))
+        self.treeWidget_2.clicked.connect(self.treeWidgetClicked)
 
+    def treeWidgetClicked(self, item):
+        if item.data() != '好友':
+            from chat import UiChat
+            from chat import WidgetChat
+            # QQ界面的widget
+            friendUsername = item.data()
+            self.widget_dict[friendUsername] = WidgetChat(self, friendUsername)
+            self.ui_dict[friendUsername] = (UiChat(self.s, friendUsername, self.username))
+            self.ui_dict[friendUsername].setupUi(self.widget_dict[friendUsername])
+            self.widget_dict[friendUsername].show()
+
+        else:
+            pass
 
     def searchFriend(self):
         self.widget3.show()
@@ -412,28 +461,20 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.label.setText(_translate("Dialog", "<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; color:#ffffff;\">联系人</span></p></body></html>"))
-        self.label_2.setText(_translate("Dialog", "<html><head/><body><p><img src=\"./images/QQ-3.jpg\"/></p></body></html>"))
+        self.label.setText(_translate("Dialog",
+                                      "<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; color:#ffffff;\">联系人</span></p></body></html>"))
+        self.label_2.setText(
+            _translate("Dialog", "<html><head/><body><p><img src=\"./images/QQ-3.jpg\"/></p></body></html>"))
         self.pushButton_2.setText(_translate("Dialog", "搜索"))
         self.toolButton.setToolTip(_translate("Dialog", "<html><head/><body><p><br/></p></body></html>"))
         self.toolButton.setText(_translate("Dialog", "新朋友"))
         self.toolButton_2.setText(_translate("Dialog", "群通知"))
 
         # treeWidget 1
-        # self.treeWidget_2.headerItem().setText(0, _translate("Dialog", "分组"))
         __sortingEnabled = self.treeWidget_2.isSortingEnabled()
         self.treeWidget_2.setSortingEnabled(False)
-        # self.treeWidget_2.topLevelItem(0).setText(0, _translate("Dialog", "好友"))
-        self.showFriends()
 
 
-        # self.treeWidget_2.topLevelItem(0).child(0).setText(0, _translate("Dialog", "AI"))
-        # self.treeWidget_2.topLevelItem(1).setText(0, _translate("Dialog", "B"))
-        # self.treeWidget_2.topLevelItem(1).child(0).setText(0, _translate("Dialog", "巴库"))
-        # self.treeWidget_2.topLevelItem(2).setText(0, _translate("Dialog", "C"))
-        # self.treeWidget_2.topLevelItem(2).child(0).setText(0, _translate("Dialog", "瞅瞅"))
-        # self.treeWidget_2.topLevelItem(3).setText(0, _translate("Dialog", "D"))
-        # self.treeWidget_2.topLevelItem(3).child(0).setText(0, _translate("Dialog", "当当"))
         self.treeWidget_2.setSortingEnabled(__sortingEnabled)
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("Dialog", "好友"))
         self.treeWidget.setSortingEnabled(False)
@@ -490,16 +531,8 @@ class Ui_Dialog(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_5), _translate("Dialog", "通讯录"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_6), _translate("Dialog", "订阅号"))
 
-if __name__ == "__main__":
-    import sys
-    QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
+        # start msg receive thread
+        self.msgRecvThread.start()
 
-    app =  QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_Dialog(None)
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-
-
-
-    sys.exit(app.exec_())
+        # 刷新好友列表
+        self.showFriends()

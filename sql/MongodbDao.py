@@ -50,9 +50,9 @@ class MongodbDao(object):
         _collection = _database.get_collection(collection)
         # 把查询结果转化成列表
         results = list(_collection.find(filter))
-        print(type(results))
-        print(dir(results))
-        print(results)
+        # print(type(results))
+        # print(dir(results))
+        # print(results)
         # 将查询结果return
         return results
 
@@ -68,31 +68,31 @@ class MongodbDao(object):
         self.client.close()
 
 
-if __name__ == '__main__':
-    mongo = MongodbDao()
-    data = [
-        # 如果指定了插入时的id值，就会用你指定的值，如果没有指定id值，插入后就会自动有个ObjectId("5bb9bc6aa236ce29f4898035")
-        {
-            # '_id':'1',
-            "username": 'zhangsan',
-            "msg": 'hello',
-            'date': datetime.datetime.now()
-        },
-        {
-            # '_id': '2',
-            "username": 'lisi',
-            "msg": '你好',
-            'date': datetime.datetime.now()
-        },
-        {
-            # '_id': '3',
-            "username": 'wangwu',
-            "msg": 'fine',
-            'date': datetime.datetime.now()
-        },
-    ]
-    # 插入数据
-    # 'user':要插入的库，如果不存在，mongoDB会自动帮你创建这个库
-    # 'receiver'：表，如果不存在，MongoDB会自动帮你创建表
-    # data: 要插入到 trade_center库下面的users表里的数据
-    mongo.insert('test', 'test', data)
+# if __name__ == '__main__':
+#     mongo = MongodbDao()
+#     data = [
+#         # 如果指定了插入时的id值，就会用你指定的值，如果没有指定id值，插入后就会自动有个ObjectId("5bb9bc6aa236ce29f4898035")
+#         {
+#             # '_id':'1',
+#             "username": 'zhangsan',
+#             "msg": 'hello',
+#             'date': datetime.datetime.now()
+#         },
+#         {
+#             # '_id': '2',
+#             "username": 'lisi',
+#             "msg": '你好',
+#             'date': datetime.datetime.now()
+#         },
+#         {
+#             # '_id': '3',
+#             "username": 'wangwu',
+#             "msg": 'fine',
+#             'date': datetime.datetime.now()
+#         },
+#     ]
+#     # 插入数据
+#     # 'user':要插入的库，如果不存在，mongoDB会自动帮你创建这个库
+#     # 'receiver'：表，如果不存在，MongoDB会自动帮你创建表
+#     # data: 要插入到 trade_center库下面的users表里的数据
+#     mongo.insert('test', 'test', data)

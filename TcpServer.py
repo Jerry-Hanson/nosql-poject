@@ -5,7 +5,8 @@ import threading
 import json
 from utils.ConfigFileReader import ConfigFileReader
 from sql.UserDao import UserDao
-
+from sql.MongodbDao import MongodbDao
+from bson import json_util
 
 config = ConfigFileReader("config/server_config.yaml")
 address = config.info['server_address']
@@ -15,15 +16,8 @@ s = socket(AF_INET, SOCK_STREAM)
 s.bind((address, port))
 # 设置最大连接数
 s.listen(config.info['max_connection'])
-
-client_list = []
-
-# 用户名 密码
-user_list = [[2097557613, 123456], [2097557614, 123456], [2097557615, 123456], [2097557616, 123456],
-             [2097557617, 123456], [2097557618, 123456]]
-user_l = len(user_list)
-user_client = []
-group_list = [['tcp群'], ['兼职群'], ['同学群'], ['学习资料群']]
+connect_ip = dict()  # 用来建立用户和其对应的ip的联系
+connect_socket = dict()  # 用来建立ip和套接字之间的联系
 
 
 def getDao():
@@ -33,6 +27,22 @@ def getDao():
                   password=config.info['mysql_pwd'],
                   database=config.info['mysql_database'])
     return dao
+
+
+def getMongodbDao():
+    dao = MongodbDao()
+    return dao
+
+
+def searchmongoDB(myname, sendname):  # 查找mogodb中的聊天记录
+    dao = MongodbDao()
+    filter_1 = {"send_user": str(myname), "recv_user": str(sendname)}
+    chatlist_1 = dao.search(str(myname), str(sendname), filter_1)
+    filter_2 = {"send_user": str(sendname), "recv_user": str(myname)}
+    chatlist_2 = dao.search(str(sendname), str(myname), filter_2)
+    chatlist = chatlist_1 + chatlist_2
+    return chatlist
+
 
 def login(username, password):
     """
@@ -56,10 +66,12 @@ def login(username, password):
     else:
         return "UserNotExist"
 
+
 def search(username):
     dao = getDao()
     info = dao.getInfo(username)
     return info
+
 
 def register(username, password, gender, age, nickName):
     """
@@ -80,6 +92,7 @@ def register(username, password, gender, age, nickName):
         dao.createUser(username, password, gender, age, nickName)
         dao.createFriendTable(username)
         return "Success"
+
 
 def addFriend(send_user, recv_user):
     """
@@ -107,26 +120,54 @@ def searchFriend(username):
     return friend_list
 
 
+def send_Message(send_user, recv_user, data, send_time):
+    # 向MongoDB中写入聊天记录
+    try:
+        mongodao = getMongodbDao()
+        # 把数据存入MongoDB
+        data = [{"send_user": str(send_user), "recv_user": str(recv_user), "msg": data, 'date': send_time}]
+        mongodao.insert(send_user, recv_user, data)
+    except:
+        return False
+    else:
+        return 'Success'
+
+
 def tcplink(clientsock, clientaddress):
-    # group_l = len(group_list)
+    global connect_ip
+    global connect_socket
+
     while True:
         recvdata = clientsock.recv(buffsize).decode('utf-8')
+        user_ip, user_port = clientaddress
 
         if recvdata == '':
             # sock被关闭
             print(clientaddress, "shutdown")
+            for i in list(connect_ip):
+                if connect_ip[i] == str(user_ip) + '-' + str(user_port):
+                    print(1)
+                    del connect_ip[i]
+                    del connect_socket[i]
             break
-        print(recvdata)
+
         info_dict = json.loads(recvdata)
         info_type = info_dict['type']
+
+        # log
+        print(f'recv data:{recvdata}')
+        print(f"msg type:{info_type}")
 
         # 登录
         if info_type == "login":
             username = info_dict['username']
             password = info_dict['password']
-            print(username, password)
-            # TODO 数据查询
+            # 数据查询
             status = login(username, password)
+            # 判断如果登录成功, 那需要将sock保存到dict中
+            if status == 'Success':
+                connect_ip.update({username: str(user_ip) + '-' + str(user_port)})
+                connect_socket.update({username: clientsock})
             # 将状态返回
             clientsock.send(status.encode())
 
@@ -145,90 +186,56 @@ def tcplink(clientsock, clientaddress):
             username = info_dict['username']
             info = search(username)
             if info is None:
-                status = "UserNotExist"
+                status = {"type":"search", "info":"UserNotExists"}
             else:
-                status = json.dumps(info)
-            print(status)
-            clientsock.send(status.encode())
+                status = {"type":"search", "info":info}
+            status_str = json.dumps(status)
+            clientsock.send(status_str.encode())
 
         if info_type == "addFriend":
             send_user = info_dict['send_user']
             recv_user = info_dict['recv_user']
-            # log
-            print("addFriend", send_user, recv_user)
             # 两个人都要有添加好友的操作
             addFriend(send_user, recv_user)
-            addFriend(recv_user, send_user)
 
         if info_type == "searchFriend":
             username = info_dict['username']
-            # log
-            print("searchFriend", username)
             friend_list = searchFriend(username)
-            info_str = json.dumps(friend_list)
+            info = {'type': "searchFriend", "friends":friend_list}
+            info_str = json.dumps(info)
             clientsock.send(info_str.encode())
 
-        # if str(logindata[0])=='login':
-        #     login(logindata,clientsock)
-        #
-        # elif str(logindata[0])=='wechat_req':
-        #     #reqci=1
-        #     for y in range(0,group_l):
-        #         if str(group_list[y][0])==str(logindata[1]):
-        #             requser=str(logindata[2])+' '+'加入'
-        #             group_list[y].append(clientsock)
-        #             groupl=len(group_list[y])
-        #             if groupl>2:
-        #                 for h in range(1,groupl):
-        #                     group_list[y][h].send(requser.encode())
-        #             else:
-        #                 clientsock.send(requser.encode())
-        #             break
-        #
-        # elif str(logindata[0])=='wechat':
-        #     for wl in range(0,group_l):
-        #         if str(group_list[wl][0])==str(logindata[1]):
-        #             senddata=str(logindata[2])+":"+str(logindata[3])
-        #             l = len(group_list[wl])
-        #             try:
-        #                 if l >=2:
-        #                     for x in range(1, l):
-        #                         group_list[wl][x].send(senddata.encode())
-        #                 else:
-        #                     clientsock.send(senddata.encode())
-        #                     break
-        #                 print("群聊信息" + str(senddata)+str(clientaddress))
-        #             except ValueError:
-        #                 break
-        #
-        # elif str(logindata[0])=='personal':
-        #     #print(logindata)
-        #     user_cl = len(user_client)
-        #     #print(user_client)
-        #     send_info = str(logindata[1])+":"+str(logindata[3])
-        #     z=1
-        #     for pl in range(0,user_cl):
-        #         if user_client[pl][0]==logindata[2]:
-        #             user_client[pl][1].send(send_info.encode())
-        #             #clientsock.send(send_info.encode())
-        #             break
-        #         elif z==user_cl:
-        #             back=str(logindata[2])+'不在线'
-        #             clientsock.send(back.encode())
-        #         z+=1
-        #
-        # elif str(logindata[0])=='':
-        #     print('无法识别：')
-        #     print(logindata[0])
-        #     break
+        if info_type == "sendMessage":
+            send_user = info_dict['sender']
+            recv_user = info_dict['receiver']
+            data = info_dict["msg"]
+            time_send = info_dict["time"]
+            send_Message(send_user, recv_user, data, time_send)  # 把数据存入本地的MongoDB中
+            message = {'type':'sendMsg', 'sender': send_user, 'data': data, 'time': time_send}
+            data2 = json.dumps(message)
+            # 将数据抓发给接受者
+            if recv_user in list(connect_socket) and data:
+                # 如果用户socket在线就把消息发送给客户端
+                connect_socket[recv_user].send(data2.encode())
+
+
+        if info_type == "chatList":
+            send_user = info_dict['sender']
+            recv_user = info_dict['receiver']
+            info = searchmongoDB(send_user, recv_user)
+
+            if info is None:
+                status = {'type':'showHistory', 'receiver':recv_user, "info":[]}
+            else:
+                status = {'type':'showHistory', 'receiver':recv_user, "info":info}
+            data_str = json_util.dumps(status)
+            clientsock.send(data_str.encode())  # 把聊天记录发送回去
 
     clientsock.close()
-    # del client_list[-1]
 
 
 while True:
     clientsock, clientaddress = s.accept()
-    client_list.append(clientsock)
     print('connect from:', clientaddress)
     # 每当接收到一个sock的时候就开启一个线程进行tcpLink
     # 多线程处理sock消息

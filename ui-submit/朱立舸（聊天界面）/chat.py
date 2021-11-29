@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from functools import partial
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -74,6 +74,10 @@ class Ui_Form(object):
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
+        self.pushButton_2.clicked.connect(partial(self.convert, ui))
+        self.textBrowser.setText(str(self.textEdit.toPlainText()))
+
+
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
@@ -87,7 +91,13 @@ class Ui_Form(object):
         self.pushButton.setText(_translate("Form", "关闭"))
         self.pushButton_2.setText(_translate("Form", "发送"))
         self.pushButton_3.setText(_translate("Form", "聊天记录"))
+
+    def convert(self,ui):
+        print(self.textEdit.toPlainText())
+        self.textBrowser.append(str(self.textEdit.toPlainText()))
+
 import pics
+
 if __name__ == "__main__":
 	import sys
 	QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
