@@ -34,7 +34,6 @@ class UserDao:
         for table in tables:
             if table[0].strip() == username.strip():
                 return True
-
         return False
 
     def createUserTable(self, username):
@@ -72,8 +71,12 @@ class UserDao:
             friendUsername : 好友的username
         returns: isSuccess(Boolean) 如果插入成功返回True， 否则返回False """
         username = username.lower()
-
         cursor = self.db.cursor()
+
+        # 好友存在插入失败
+        if self.isFriendExists(username, friendUsername):
+            return False
+
         sql = "insert into {}(friendUsername, addTime) values (%s, %s)"
         try:
             cursor.execute(sql.format(username), (friendUsername, datetime.datetime.now()))
@@ -100,7 +103,9 @@ class UserDao:
             username : 用户名
             friendUsername: 查询的好友的username
         returns : 如果有这个好友， 返回这个好友的info (friendUsername, addTime)， 否则返回None"""
+        username = username.lower()
         cursor = self.db.cursor()
+
         sql = "select * from {} where friendUsername = %s"
         try:
             cursor.execute(sql.format(username), (friendUsername, ))
@@ -118,8 +123,13 @@ class UserDao:
             username : 用户名
             friendUsername: 某一个用户的好友
         return： isSuccess(Boolean) 如果删除成功返回True， 否则返回False """
-
+        username = username.lower()
         cursor = self.db.cursor()
+
+        # 好友不存在删除失败
+        if not self.isFriendExists(username, friendUsername):
+            return False
+
         sql = "delete from {} where friendUsername = %s"
         try:
             cursor.execute(sql.format(username), (friendUsername))
@@ -134,9 +144,12 @@ class UserDao:
         finally:
             cursor.close()
 
-
 if __name__ == "__main__":
 
-    dao = UserDao(host = '127.0.0.1', user = 'root', password = 'root',
-                  database = 'nosql', port = 3306)
-    print(dao.deleteFriend("jerry", "hurry"))
+    dao = UserDao(host = 'localhost', user = 'root', password = '123456',
+                  database = 'testdb', port = 3306)
+    dao.createUserTable("zs")
+    dao.addFriend("zs","jerry")
+    #print(dao.isFriendExists("jerry", "ls"))
+   # print(dao.isFriendExists("zs", "ls"))
+    print(dao.deleteFriend("jerry", "ls"))
