@@ -9,6 +9,7 @@ class UserDao:
                                   password=password,
                                   database=database)
 
+
         # 关于用户账户的操作
 
     def isUserExists(self, username):
@@ -88,6 +89,11 @@ class UserDao:
         cursor = self.db.cursor()
         sql = "create table {} (friendUsername varchar(32) primary key, addTime varchar(32))"
         cursor.execute(sql.format(username))
+        self.db.commit()
+        sql = "insert into {} values(%s, %s)"
+        time_now = datetime.now()
+        time_str = '-'.join([str(time_now.year), str(time_now.month), str(time_now.day)])
+        cursor.execute(sql.format(username), ('QQ机器人', time_str,))
         self.db.commit()
         cursor.close()
 

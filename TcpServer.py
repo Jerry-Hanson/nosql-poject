@@ -214,9 +214,28 @@ def tcplink(clientsock, clientaddress):
             message = {'type':'sendMsg', 'sender': send_user, 'data': data, 'time': time_send}
             data2 = json.dumps(message)
             # 将数据抓发给接受者
-            if recv_user in list(connect_socket) and data:
-                # 如果用户socket在线就把消息发送给客户端
-                connect_socket[recv_user].send(data2.encode())
+            if recv_user == 'QQ机器人':#机器人的对话
+                import requests
+                import urllib
+                import time
+                response = requests.get(
+                    url='http://api.qingyunke.com/api.php',
+                    params={
+                        'key': 'free',
+                        'appid': 0,
+                        'msg': urllib.parse.quote(data)
+                    })
+                if response.status_code == 200:
+                    content = response.json()
+                    time_now = str(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()))
+                    send_Message(recv_user, send_user, content['content'], time_now)
+                    message = {'type': 'sendMsg', 'sender': 'QQ机器人', 'data': content['content'], 'time': time_now}
+                    data3 = json.dumps(message)
+                    connect_socket[send_user].send(data3.encode())
+            else:
+                if recv_user in list(connect_socket) and data:#和好友对话
+                    # 如果用户socket在线就把消息发送给客户端
+                    connect_socket[recv_user].send(data2.encode())
 
 
         if info_type == "chatList":

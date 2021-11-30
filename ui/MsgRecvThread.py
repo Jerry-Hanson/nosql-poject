@@ -43,6 +43,7 @@ class MsgRecvThread(QThread):
                 data = data_dict['data']
                 time = data_dict['time']
                 print(self.parent_ui.ui_dict.keys())
+                print("sender", sender)
                 if sender in self.parent_ui.ui_dict.keys():
                     #  sender, send_time, msg
                     self.parent_ui.ui_dict[sender].convert_send(sender, time, data)
