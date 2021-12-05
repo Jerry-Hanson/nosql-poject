@@ -18,6 +18,9 @@ import sys
 sys.path.append("../")
 
 from utils.ConfigFileReader import ConfigFileReader
+from utils.MsgUtils import MsgFlag
+import time
+
 
 class Ui_MainWindow(object):
 
@@ -128,7 +131,10 @@ class Ui_MainWindow(object):
                                         QMessageBox.Close)
             else:
                 login_info_dict = {"type": "login", "username": self.user, "password": password}
+                # 给发送的消息添加一个hash-id
+                login_info_dict.update({"id": hash(login_info_dict)})
                 login_info = json.dumps(login_info_dict)
+                msgId = MsgFlag(socket, "login", )
                 self.s.send(login_info.encode())
                 self.login_recv()
 
@@ -139,7 +145,6 @@ class Ui_MainWindow(object):
         if str(recv_info) == 'Success':
             QMessageBox.information(self.MainWindow, '登录成功', '登录成功!', QMessageBox.Ok | QMessageBox.Close,
                                     QMessageBox.Close)
-            # QtCore.QCoreApplication.instance().quit()
             # 打开QQ界面
             widget.hide()
 

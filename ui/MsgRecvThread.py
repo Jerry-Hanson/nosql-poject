@@ -1,8 +1,11 @@
-from multiprocessing import Process
-
 from PyQt5.QtCore import QThread
 from bson import json_util
 import json
+from utils.MsgUtils import recvMsg
+from utils.ConfigFileReader import ConfigFileReader
+
+con = ConfigFileReader('config/client_config.yaml')
+buffersize = con.info['buffersize']
 
 class MsgRecvThread(QThread):
     """
@@ -15,13 +18,8 @@ class MsgRecvThread(QThread):
 
     def run(self) -> None:
         while True:
-            data = ""
-            while True:
-                buf = self.s.recv(1024).decode('utf-8')
-                data += buf
-                if len(buf) < 1024:
-                    break
-            # send msg
+            data = recvMsg(self.s, buffersize)
+
             data_dict = json_util.loads(data)
             print(f"data_dict: {data_dict}")
 

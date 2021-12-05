@@ -85,6 +85,7 @@ class UserDao:
         self.db.commit()
         cursor.close()
 
+
     def createFriendTable(self, username):
         cursor = self.db.cursor()
         sql = "create table {} (friendUsername varchar(32) primary key, addTime varchar(32))"
@@ -97,6 +98,7 @@ class UserDao:
         self.db.commit()
         cursor.close()
 
+    # 单方面的向一个用户的表中添加好友
     def addFriend(self, send_user, recv_user):
         cursor = self.db.cursor()
         time_now = datetime.now()
@@ -106,6 +108,7 @@ class UserDao:
         self.db.commit()
         cursor.close()
 
+    # 获取一个用户的所有好友
     def getFriends(self, username):
         cursor = self.db.cursor()
         sql = "select friendUsername from {}"
