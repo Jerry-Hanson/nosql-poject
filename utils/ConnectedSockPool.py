@@ -9,11 +9,12 @@ class ConnectedSockPool:
         return None
 
     def add(self, ip, port, username, clientsock):
-        self.pool.append({"ip": ip, "port":port, "username": username, "clientsock": clientsock})
+        self.pool.append({"ip": ip, "port": port, "username": username, "clientsock": clientsock})
 
     def has(self, user_ip, user_port):
         for i, item in enumerate(self.pool):
-            if item['user_ip'] == user_ip and item['user_port'] == user_port:
+            print(item)
+            if item['ip'] == user_ip and item['port'] == user_port:
                 return True
         return False
 
@@ -25,6 +26,6 @@ class ConnectedSockPool:
 
     def delSocket(self, user_ip, user_port):
         for i, item in enumerate(self.pool):
-            if item['user_ip'] == user_ip and item['user_port'] == user_port:
+            if item['ip'] == user_ip and item['port'] == user_port:
                 del self.pool[i]
                 break

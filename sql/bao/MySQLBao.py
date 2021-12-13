@@ -1,7 +1,7 @@
 import sys
 
 sys.path.append('../')
-from dao.MySQLDao import MySQLDao
+from sql.dao.MySQLDao import MySQLDao
 from datetime import datetime
 
 
@@ -25,6 +25,11 @@ class MySQLBao:
         """
         createFriendListTableSql = "create table {} (`friendUsername` varchar(32) primary key, `addTime` varchar(32) not null )"
         self.dao.execute(createFriendListTableSql.format(username))
+
+        sql = "insert into {} values(%s, %s)"
+        time_now = datetime.now()
+        time_str = '-'.join([str(time_now.year), str(time_now.month), str(time_now.day)])
+        self.dao.execute(sql.format(username), "robot", time_str)
 
         insertUserInfoSql = "insert into user values(%s, %s, %s, %s, %s)"
         self.dao.execute(insertUserInfoSql, username, password, gender, age, nickname)

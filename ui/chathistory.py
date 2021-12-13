@@ -11,13 +11,15 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import json
 from bson import json_util
-
+import numpy as np
+import cv2
 
 class Ui_Formt2(object):
     def __init__(self, myname, sendname, message):
         self.myname = myname
         self.sendname = sendname
         self.message = message
+        self.count_pic = 0
 
     def quick_sort(self):
         for i in range(1, len(self.message)):
@@ -31,11 +33,45 @@ class Ui_Formt2(object):
         for i in self.message:
             print(type(i), i)
             if i['send_user'] == self.myname:
-                self.textBrowser.append("<font color='red'>" + str(i['send_user']) + str(i['date']))
-                self.textBrowser.append(i['msg'])
+                if i['message_type'] == 'str' or i['message_type'] == 'file':
+                    self.textBrowser.append("<font color='red'>" + str(i['send_user']) + str(i['date']))
+                    self.textBrowser.append(i['msg'])
+                elif i['message_type'] == 'pic':
+                    self.show_image_myself(i)
+
             else:
-                self.textBrowser.append("<font color='blue'>" + str(i['send_user']) + str(i['date']))
-                self.textBrowser.append(i['msg'])
+                if i['message_type'] == 'str':
+                    self.textBrowser.append("<font color='blue'>" + str(i['send_user']) + str(i['date']))
+                    self.textBrowser.append(i['msg'])
+                elif i['message_type'] == 'pic':
+                    self.show_image_other(i)
+
+
+
+    def show_image_myself(self, i):
+        i['msg'] = np.array(i['msg'])
+        try:
+            self.write_Pic(i['msg'], i['send_user']+str(self.count_pic)+".jpg")
+        finally:
+            pass
+        self.textBrowser.append(
+            "<font color='red' style='position: absolute;right:0px'>" + str(i['send_user']) + str(i['date']) + "</font>")
+        self.textBrowser.append(r"<img src='./content/{}'/>".format(i['send_user']+str(self.count_pic)+".jpg"))
+        self.count_pic += 1
+    def show_image_other(self, i):
+        i['msg'] = np.array(i['msg'])
+        try:
+            self.write_Pic(i['msg'], str(i['send_user'])+str(self.count_pic)+".jpg")
+        finally:
+            pass
+        self.textBrowser.append(
+            "<font color='blue' style='position: absolute;right:0px'>" + str(i['send_user']) + str(i['date']) + "</font>")
+        self.textBrowser.append(r"<img src='./content/{}'/>".format(i['send_user']+str(self.count_pic)+".jpg"))
+        self.count_pic += 1
+
+    def write_Pic(self, res, name):
+        cv2.imwrite('./content/{}'.format(name), res)
+
 
 
     def setupUi(self, Form):

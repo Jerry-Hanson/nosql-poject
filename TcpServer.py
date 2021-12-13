@@ -7,6 +7,8 @@ from sql.bao.MySQLBao import MySQLBao
 from sql.MongodbDao import MongodbDao
 from bson import json_util
 from utils.ConnectedSockPool import ConnectedSockPool
+from ftp.dao.FTPDao import FTPDao
+import pymysql
 
 config = ConfigFileReader("config/server_config.yaml")
 address = config.info['server_address']
@@ -30,7 +32,16 @@ def getBao():
     return bao
 
 
+def getFtpDao():
+    dao = FTPDao(ip=config.info['ftp_ip'],
+                 port=config.info['ftp_port'],
+                 username=config.info['ftp_username'],
+                 password=config.info['ftp_password'])
+    return dao
+
+
 bao = getBao()
+ftp_dao = getFtpDao()
 
 
 def getMongodbDao():
@@ -44,6 +55,7 @@ def searchmongoDB(myname, sendname):  # 查找mogodb中的聊天记录
     chatlist_1 = dao.search(str(myname), str(sendname), filter_1)
     filter_2 = {"send_user": str(sendname), "recv_user": str(myname)}
     chatlist_2 = dao.search(str(sendname), str(myname), filter_2)
+    print("robot", chatlist_1, "IIIIII", chatlist_2)
     chatlist = chatlist_1 + chatlist_2
     return chatlist
 
@@ -56,7 +68,7 @@ def login(username, password):
     :return:
         "UserNotExist",
         "WrongPwd",
-        "AlreadyLogin",
+        "AlreadyLogin"，
         “Success”
     """
     if bao.isUserExist(username) is False:
@@ -88,6 +100,8 @@ def register(username, password, gender, age: str, nickName):
         return "userExists"
     else:
         bao.createUser(username, password, gender, age, nickName)
+        # 创建ftp目录
+        ftp_dao.mkdir(username)
         return "Success"
 
 
@@ -101,12 +115,13 @@ def addFriend(send_user, recv_user):
     bao.addFriend(send_user, recv_user)
 
 
-def send_Message(send_user, recv_user, data, send_time):
+def send_MessagetoMongodb(send_user, recv_user, data, send_time, message_type):
     # 向MongoDB中写入聊天记录
     try:
         mongodao = getMongodbDao()
         # 把数据存入MongoDB
-        data = [{"send_user": str(send_user), "recv_user": str(recv_user), "msg": data, 'date': send_time}]
+        data = [{"send_user": str(send_user), "recv_user": str(recv_user), "msg": data, 'date': send_time,
+                 'message_type': message_type}]
         mongodao.insert(send_user, recv_user, data)
     except:
         return False
@@ -127,6 +142,21 @@ def readMsg(clientsock, buffersize):
     return msg[:-1]
 
 
+def sendMsg(socket, id, type, info):  # type 实现的功能, info 实际包含的数据.
+    """
+    info的类型为字典!!!!
+    在消息的末尾加上一个结束符
+    :param socket:
+    :param msg:
+    :return:
+    """
+    info = json_util.dumps(info)
+    send_msg = {"id": id, "type": type, "info": info}
+    send_msg = json_util.dumps(send_msg)
+    send_msg = send_msg + "\0"
+    socket.send(send_msg.encode("utf-8"))
+
+
 def tcplink(clientsock, clientaddress):
     user_ip, user_port = clientaddress
     try:
@@ -139,7 +169,10 @@ def tcplink(clientsock, clientaddress):
                 if sockedPool.has(user_ip, user_port):
                     sockedPool.delSocket(user_ip, user_port)
 
-            info_dict = json.loads(recvdata)
+            info_dict = json_util.loads(recvdata)
+            id_recv = info_dict['id']  # 消息的id
+
+            info_dict = json_util.loads(info_dict['info'])
             info_type = info_dict['type']
 
             # log
@@ -154,7 +187,7 @@ def tcplink(clientsock, clientaddress):
                 status = login(username, password)
                 # 判断如果登录成功, 那需要将sock保存到dict中
                 if status == 'Success':
-                    sockedPool.add(user_ip, username, clientsock)
+                    sockedPool.add(user_ip, user_port, username, clientsock)
 
                 # 将状态返回
                 clientsock.send(status.encode())
@@ -166,6 +199,7 @@ def tcplink(clientsock, clientaddress):
                 age = info_dict['age']
                 nickName = info_dict['nickName']
                 status = register(username, password, gender, age, nickName)
+
                 # 将状态返回
                 clientsock.send(status.encode())
 
@@ -177,8 +211,9 @@ def tcplink(clientsock, clientaddress):
                     status = {"type": "search", "info": "UserNotExists"}
                 else:
                     status = {"type": "search", "info": info}
-                status_str = json.dumps(status)
-                clientsock.send(status_str.encode())
+                # status_str = json.dumps(status)
+                sendMsg(clientsock, id_recv, "Initiative", status)
+                # clientsock.send(status_str.encode())
 
             if info_type == "addFriend":
                 send_user = info_dict['send_user']
@@ -190,42 +225,44 @@ def tcplink(clientsock, clientaddress):
                 username = info_dict['username']
                 friend_list = bao.getAllFriend(username)
                 info = {'type': "searchFriend", "friends": friend_list}
-                info_str = json.dumps(info)
-                clientsock.send(info_str.encode())
+                sendMsg(clientsock, id_recv, "Initiative", info)
 
             if info_type == "sendMessage":
                 send_user = info_dict['sender']
                 recv_user = info_dict['receiver']
                 data = info_dict["msg"]
                 time_send = info_dict["time"]
-                send_Message(send_user, recv_user, data, time_send)  # 把数据存入本地的MongoDB中
-                message = {'type': 'sendMsg', 'sender': send_user, 'data': data, 'time': time_send}
-                data2 = json.dumps(message)
-                # 将数据抓发给接受者
-                # if recv_user == 'QQ机器人':  # 机器人的对话
-                #     import requests
-                #     import urllib
-                #     import time
-                #     response = requests.get(
-                #         url='http://api.qingyunke.com/api.php',
-                #         params={
-                #             'key': 'free',
-                #             'appid': 0,
-                #             'msg': urllib.parse.quote(data)
-                #         })
-                #     if response.status_code == 200:
-                #         content = response.json()
-                #         time_now = str(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()))
-                #         send_Message(recv_user, send_user, content['content'], time_now)
-                #         message = {'type': 'sendMsg', 'sender': 'QQ机器人', 'data': content['content'], 'time': time_now}
-                #         data3 = json.dumps(message)
-                #         # connect_socket[send_user].send(data3.encode())
-                # else:
-                if sockedPool.isAlive(recv_user) and data:  # 和好友对话
-                    # 如果用户socket在线就把消息发送给客户端
-                    sockedPool.getSocket(recv_user).send(data2.encode())
+                message_type = info_dict['message_type']
+                send_MessagetoMongodb(send_user, recv_user, data, time_send, message_type)  # 把数据存入本地的MongoDB中
+                if recv_user == 'robot':  # 机器人的对话
+                    import requests
+                    import urllib
+                    import time
+                    response = requests.get(
+                        url='http://api.qingyunke.com/api.php',
+                        params={
+                            'key': 'free',
+                            'appid': 0,
+                            'msg': urllib.parse.quote(data)
+                        })
+                    if response.status_code == 200:
+                        content = response.json()
+                        time_now = str(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()))
+                        message = {'type': 'sendMsg', 'sender': 'robot', 'data': content['content'], 'time': time_now,
+                                   'message_type': message_type}
+                        k = send_MessagetoMongodb('robot', send_user, content['content'], time_now)
+                        print("-" * 10)
+                        print(k)
+                        sendMsg(sockedPool.getSocket(send_user), id_recv, "passive", message)
+                else:
+                    message = {'type': 'sendMsg', 'sender': send_user, 'data': data, 'time': time_send,
+                               'message_type': message_type}
+
+                    if sockedPool.isAlive(recv_user) and data:  # 和好友对话
+                        sendMsg(sockedPool.getSocket(recv_user), id_recv, "passive", message)
 
             if info_type == "chatList":
+                print(info_dict)
                 send_user = info_dict['sender']
                 recv_user = info_dict['receiver']
                 info = searchmongoDB(send_user, recv_user)
@@ -234,11 +271,13 @@ def tcplink(clientsock, clientaddress):
                     status = {'type': 'showHistory', 'receiver': recv_user, "info": []}
                 else:
                     status = {'type': 'showHistory', 'receiver': recv_user, "info": info}
-                data_str = json_util.dumps(status)
-                clientsock.send(data_str.encode())  # 把聊天记录发送回去
+
+                sendMsg(clientsock, id_recv, "Initiative", status)
+
     except ConnectionResetError as e:
         if sockedPool.has(user_ip, user_port):
             sockedPool.delSocket(user_ip, user_port)
+
     clientsock.close()
 
 
