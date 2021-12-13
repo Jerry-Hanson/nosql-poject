@@ -12,15 +12,18 @@ import json
 from sql.UserDao import UserDao
 from utils.ConfigFileReader import ConfigFileReader
 from PyQt5.QtWidgets import QMessageBox
+from utils.MsgUtils import sendMsg
+from bson import json_util
 
 config = ConfigFileReader("../config/server_config.yaml")
 
 class Ui_Form(object):
-    def __init__(self, s, username, parent_ui, bufferSize=1024 ):
+    def __init__(self, s, username, data_list, parent_ui, bufferSize=1024 ):
         self.s = s
         self.bufferSize = bufferSize
         self.username = username  # 先在登录的用户
         self.parent_ui = parent_ui
+        self.data_list = data_list
 
     def setupUi(self, Form):
         self.Form = Form
@@ -69,9 +72,8 @@ class Ui_Form(object):
                                 QMessageBox.No)
         # 发送请求信息
         if ret == QMessageBox.Yes:
-            info_dict = {"type":"addFriend", "send_user":self.username, "recv_user":send_user}
-            info_str = json.dumps(info_dict)
-            self.s.send(info_str.encode())
+            info_dict = {"type": "addFriend", "send_user": self.username, "recv_user": send_user}
+            sendMsg(self.s, "passive", info_dict)
             self.Form.hide()
             time.sleep(0.3)
             self.parent_ui.showFriends()
@@ -89,10 +91,20 @@ class Ui_Form(object):
             return
 
         search_info_dict = {"type": "search", "username": username}
-        search_info = json.dumps(search_info_dict)
-        self.s.send(search_info.encode())
-        time.sleep(0.3) # 等待服务器相应
-        self.recv_msg()
+        get_id = sendMsg(self.s, "Initiative", search_info_dict)
+        flag = 1
+        while flag:
+            for i_sub, i in enumerate(self.data_list):
+                if get_id == i["id"]:
+                    user_info = json_util.loads(i['info'])['info']
+
+                    user_info_str = "\t".join([user_info['username'], user_info['gender'], str(user_info['age']), user_info['nickName']])
+
+                    self.item(user_info_str)
+                    # self.parent_ui.friends = get_info['friends']
+                    self.data_list.pop(i_sub)
+                    flag = 0
+                    break
 
     def item(self, text):
         _translate = QtCore.QCoreApplication.translate

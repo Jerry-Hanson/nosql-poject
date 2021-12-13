@@ -5,19 +5,17 @@
 # Created by: PyQt5 UI code generator 5.11.2
 
 # WARNING! All changes made in this file will be lost!
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMessageBox
-import sys
 from socket import *
 import threading
 import json
-
 import sys
-
 sys.path.append("../")
-
 from utils.ConfigFileReader import ConfigFileReader
+from utils.MsgUtils import sendMsg
+
+
 
 class Ui_MainWindow(object):
 
@@ -128,25 +126,23 @@ class Ui_MainWindow(object):
                                         QMessageBox.Close)
             else:
                 login_info_dict = {"type": "login", "username": self.user, "password": password}
-                login_info = json.dumps(login_info_dict)
-                self.s.send(login_info.encode())
-                self.login_recv()
+                # 给发送的消息添加一个hash-id
+                msgId = sendMsg(self.s, "Initiative", login_info_dict)
+                self.login_recv(msgId)
 
     # login的响应窗口
-    def login_recv(self):
+    def login_recv(self, msgId):
         recv_info = self.s.recv(self.buffsize).decode('utf-8')
         print(recv_info)
         if str(recv_info) == 'Success':
             QMessageBox.information(self.MainWindow, '登录成功', '登录成功!', QMessageBox.Ok | QMessageBox.Close,
                                     QMessageBox.Close)
-            # QtCore.QCoreApplication.instance().quit()
             # 打开QQ界面
             widget.hide()
 
             # QQ界面的widget
             from hylb import Ui_Dialog
             from hylb import Dialog
-
             # 把sock传到新的窗口中
             self.ui1 = Ui_Dialog(ui.s, self.user)
             self.widget1 = Dialog(self.ui1)

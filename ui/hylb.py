@@ -13,9 +13,11 @@ from PyQt5.QtWidgets import QMainWindow, QDialog
 
 from friendSearch import Ui_Form
 import json
-
+from utils.MsgUtils import sendMsg
 from PyQt5.QtCore import QThread, QObject, pyqtSignal
 from MsgRecvThread import MsgRecvThread
+from bson import json_util
+
 
 class Dialog(QtWidgets.QWidget):
     """
@@ -46,12 +48,13 @@ class Ui_Dialog(object):
         # 子窗口dict
         self.ui_dict = {}
         self.widget_dict = {}
+        self.data_list = []
 
         # 好友搜索
         self.widget3 = QtWidgets.QWidget()
-        self.ui3 = Ui_Form(s, self.username, parent_ui = self)
+        self.ui3 = Ui_Form(s, self.username, self.data_list, parent_ui = self)
         self.ui3.setupUi(self.widget3)
-        self.msgRecvThread = MsgRecvThread(self.s, self)
+        self.msgRecvThread = MsgRecvThread(self.s, self, self.data_list)
 
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
@@ -429,10 +432,21 @@ class Ui_Dialog(object):
         # 初始化所有的好友
         # 发送请求拿到所有的好友
         info_dict = {"type": "searchFriend", "username": self.username}
-        info_str = json.dumps(info_dict)
-        self.s.send(info_str.encode())
-        # 等待服务器相应
-        time.sleep(0.5)
+        get_id = sendMsg(self.s, "Initiative", info_dict)
+
+        # 循环从列表中查找有无我需要的数据,有就处理
+        flag = 1
+        while flag:
+            for i_sub, i in enumerate(self.data_list):
+                if get_id == i["id"]:
+                    get_info = json_util.loads(i['info'])
+                    self.friends = get_info['friends']
+                    self.data_list.pop(i_sub)
+                    flag = 0
+                    break
+        # info_str = json.dumps(info_dict)
+        # self.s.send(info_str.encode())
+
         # 获取返回的信息
         # recv_info = self.s.recv(self.bufferSize).decode('utf-8')
         # friend_list = json.loads(recv_info)
@@ -448,7 +462,7 @@ class Ui_Dialog(object):
             # QQ界面的widget
             friendUsername = item.data()
             self.widget_dict[friendUsername] = WidgetChat(self, friendUsername)
-            self.ui_dict[friendUsername] = (UiChat(self.s, friendUsername, self.username))
+            self.ui_dict[friendUsername] = (UiChat(self.s, friendUsername, self.username, self.data_list))
             self.ui_dict[friendUsername].setupUi(self.widget_dict[friendUsername])
             self.widget_dict[friendUsername].show()
 

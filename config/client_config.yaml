@@ -1,3 +1,8 @@
 server_address : "127.0.0.1"
 server_port : 4567
 buffersize : 1024
+
+ftp_ip : "127.0.0.1"
+ftp_port : 21
+ftp_username : "Jerry"
+ftp_password : "123"

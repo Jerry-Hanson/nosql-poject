@@ -9,6 +9,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMessageBox, QWidget
 import json
+from utils.MsgUtils import sendMsg
 
 class Ui_Form(object):
     def __init__(self, s, bufferSize=1024):
@@ -133,12 +134,13 @@ class Ui_Form(object):
                 "nickname":"" // 昵称
             """
         else:
-            register_info_dict = {"type":"register", "username":nickName, "password":pwd,
-                               "gender":gender,"age":int(age), "nickName":nickName}
-            register_info = json.dumps(register_info_dict)
-            print(register_info)
-            self.s.send(register_info.encode())
-            self.login_recv()
+            register_info_dict = {"type": "register", "username": nickName, "password": pwd,
+                               "gender": gender, "age": int(age), "nickName": nickName}
+            msgId = sendMsg(self.s, "Initiative", register_info_dict)
+            # register_info = json.dumps(register_info_dict)
+            # print(register_info)
+            # self.s.send(register_info.encode())
+            self.login_recv(msgId)
 
 
     def retranslateUi(self, Form):
@@ -152,7 +154,7 @@ class Ui_Form(object):
         self.label_5.setText(_translate("Form", "性别"))
         self.label_7.setText(_translate("Form", "年龄"))
 
-    def login_recv(self):
+    def login_recv(self, msgId):
         recv_info = self.s.recv(self.bufferSize).decode('utf-8')
         print(recv_info)
         if str(recv_info) == 'Success':
