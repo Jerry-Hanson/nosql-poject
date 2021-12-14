@@ -23,14 +23,21 @@ class MySQLBao:
         :param nickname:
         :return:
         """
+        # 创建用户的好友列表
         createFriendListTableSql = "create table {} (`friendUsername` varchar(32) primary key, `addTime` varchar(32) not null )"
         self.dao.execute(createFriendListTableSql.format(username))
 
+        # 创建用户的群聊列表
+        createGroupListTableSql = "create table {} (`groupName` varchar(32) primary key, `addTime` varchar(32))"
+        self.dao.execute(createGroupListTableSql.format(username + "_grouplist"))
+
+        # 添加机器人
         sql = "insert into {} values(%s, %s)"
         time_now = datetime.now()
         time_str = '-'.join([str(time_now.year), str(time_now.month), str(time_now.day)])
         self.dao.execute(sql.format(username), "robot", time_str)
 
+        # 向总表中添加用户信息
         insertUserInfoSql = "insert into user values(%s, %s, %s, %s, %s)"
         self.dao.execute(insertUserInfoSql, username, password, gender, age, nickname)
 
@@ -75,6 +82,43 @@ class MySQLBao:
         sql = "select friendUsername from {}"
         res = self.dao.execute(sql.format(username))
         return [i[0] for i in res]
+
+    def createGroup(self, groupName):
+        # 创建群聊
+        sql = "create table {} (`username` varchar(32) primary key not null, `addTime` varchar(32))".format(groupName)
+        self.dao.execute(sql)
+
+        # 在总的群聊表中添加这个群
+        time_now = datetime.now()
+        time_str = '-'.join([str(time_now.year), str(time_now.month), str(time_now.day)])
+        sql = "insert into `group` values(%s, %s)"
+        self.dao.execute(sql, groupName, time_str)
+
+    def joinGroup(self, username, groupName):
+        time_now = datetime.now()
+        time_str = '-'.join([str(time_now.year), str(time_now.month), str(time_now.day)])
+        # 在群的用户列表中添加用户
+        sql1 = "insert into {} values(%s, %s)".format(groupName)
+        # 在用户的群列表中添加表记录
+        sql2 = "insert into {} values(%s, %s)".format(username + "_grouplist")
+        self.dao.execute(sql1, username, time_str)
+        self.dao.execute(sql2, groupName, time_str)
+
+    def isGroupExists(self, group_name):
+        if group_name in self.dao.selectAllTable():
+            return True
+        else:
+            return False
+
+    def getGroupsByUser(self, username):
+        # 获取一个用户添加的所有群聊
+        res = self.dao.selectAll(username + "_grouplist")
+        return [s[0] for s in res]
+
+    def getAllUserByGroup(self, group_name):
+        # 获取一个群聊中所有的用户
+        res = self.dao.selectAll(group_name)
+        return [s[0] for s in res]
 
 
 if __name__ == "__main__":

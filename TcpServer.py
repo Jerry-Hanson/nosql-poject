@@ -157,6 +157,15 @@ def sendMsg(socket, id, type, info):  # type 实现的功能, info 实际包含�
     socket.send(send_msg.encode("utf-8"))
 
 
+def addGroup(send_user, group_name):
+    bao.joinGroup(send_user, group_name)
+
+
+def createGroup(send_user, group_name):
+    bao.createGroup(group_name)
+    bao.joinGroup(send_user, group_name)
+
+
 def tcplink(clientsock, clientaddress):
     user_ip, user_port = clientaddress
     try:
@@ -221,10 +230,36 @@ def tcplink(clientsock, clientaddress):
                 # 两个人都要有添加好友的操作
                 addFriend(send_user, recv_user)
 
+            if info_type == "addGroup":
+                send_user = info_dict['send_user']
+                group_name = info_dict['groupName']
+                addGroup(send_user, group_name)
+
+            if info_type == "createGroup":
+                send_user = info_dict['send_user']
+                group_name = info_dict['group_name']
+                createGroup(send_user, group_name)
+
             if info_type == "searchFriend":
                 username = info_dict['username']
                 friend_list = bao.getAllFriend(username)
                 info = {'type': "searchFriend", "friends": friend_list}
+                sendMsg(clientsock, id_recv, "Initiative", info)
+
+            if info_type == "searchGroup":
+                # 查询一个群聊是否存在
+                group_name = info_dict['group_name']
+                if bao.isGroupExists(group_name):
+                    status = "SUCCESS"
+                else:
+                    status = "NotExists"
+                sendMsg(clientsock, id_recv, "Initiative", status)
+
+            if info_type == "searchGroupsByUser":
+                # 查询一个用户的的所有群聊
+                username = info_dict['username']
+                groups = bao.getGroupsByUser(username)
+                info = {'type': "searchGroupsByUser", "groups": groups}
                 sendMsg(clientsock, id_recv, "Initiative", info)
 
             if info_type == "sendMessage":
@@ -233,6 +268,8 @@ def tcplink(clientsock, clientaddress):
                 data = info_dict["msg"]
                 time_send = info_dict["time"]
                 message_type = info_dict['message_type']
+                send_type = info_dict['send_type'] # 是否是群聊的方式发送消息
+
                 send_MessagetoMongodb(send_user, recv_user, data, time_send, message_type)  # 把数据存入本地的MongoDB中
                 if recv_user == 'robot':  # 机器人的对话
                     import requests
@@ -249,17 +286,26 @@ def tcplink(clientsock, clientaddress):
                         content = response.json()
                         time_now = str(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()))
                         message = {'type': 'sendMsg', 'sender': 'robot', 'data': content['content'], 'time': time_now,
-                                   'message_type': message_type}
-                        k = send_MessagetoMongodb('robot', send_user, content['content'], time_now)
+                                   'message_type': message_type, "send_type":"personal"}  # 这里默认机器人聊天是单人聊天
+                        k = send_MessagetoMongodb('robot', send_user, content['content'], time_now, message_type)
                         print("-" * 10)
                         print(k)
                         sendMsg(sockedPool.getSocket(send_user), id_recv, "passive", message)
+
                 else:
                     message = {'type': 'sendMsg', 'sender': send_user, 'data': data, 'time': time_send,
-                               'message_type': message_type}
+                               'message_type': message_type, "send_type": send_type, 'group_name':recv_user}
 
-                    if sockedPool.isAlive(recv_user) and data:  # 和好友对话
+                    if sockedPool.isAlive(recv_user) and data and send_type == "personal":  # 和好友对话
                         sendMsg(sockedPool.getSocket(recv_user), id_recv, "passive", message)
+
+                    elif data and send_type == 'group':
+                        # 查询该群聊中是所有username
+                        group_name = recv_user
+                        recv_users = bao.getAllUserByGroup(group_name)
+                        for recv_user in recv_users:
+                            if sockedPool.isAlive(recv_user):  # 和好友对话
+                                sendMsg(sockedPool.getSocket(recv_user), id_recv, "passive", message)
 
             if info_type == "chatList":
                 print(info_dict)

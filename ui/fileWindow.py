@@ -66,16 +66,3 @@ class Ui_FileWindow(object):
         item = QtWidgets.QListWidgetItem()
         item.setText(_translate("FileWindow", text))
         self.listWidget.addItem(item)
-
-
-if __name__ == "__main__":
-    if __name__ == "__main__":
-        import sys
-
-        app = QtWidgets.QApplication(sys.argv)
-
-        widget = QtWidgets.QWidget()
-        ui = Ui_FileWindow()
-        ui.setupUi(widget)
-        widget.show()
-        sys.exit(app.exec_())

@@ -9,9 +9,11 @@ import time
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QModelIndex
-from PyQt5.QtWidgets import QMainWindow, QDialog
+from PyQt5.QtWidgets import QMainWindow, QDialog, QMessageBox
 
 from friendSearch import Ui_Form
+from groupSearch import Ui_Form as group_UiForm
+from createGroup import Ui_Form as create_group_UiForm
 import json
 from utils.MsgUtils import sendMsg
 from PyQt5.QtCore import QThread, QObject, pyqtSignal
@@ -54,7 +56,18 @@ class Ui_Dialog(object):
         self.widget3 = QtWidgets.QWidget()
         self.ui3 = Ui_Form(s, self.username, self.data_list, parent_ui = self)
         self.ui3.setupUi(self.widget3)
-        self.msgRecvThread = MsgRecvThread(self.s, self, self.data_list)
+
+        # 群聊搜索
+        self.widget_groupSearch = QtWidgets.QWidget()
+        self.ui_groupSearch = group_UiForm(s, self.username, self.data_list, parent_ui = self)
+        self.ui_groupSearch.setupUi(self.widget_groupSearch)
+
+        # 群聊创建
+        self.widget_create_group = QtWidgets.QWidget()
+        self.ui_create_group = create_group_UiForm(s = self.s, parent_ui = self,username =  self.username, widget = self.widget_create_group)
+        self.ui_create_group.setupUi(self.widget_create_group)
+
+        self.msgRecvThread = MsgRecvThread(self.s, self, self.data_list, self.username)
 
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
@@ -415,9 +428,28 @@ class Ui_Dialog(object):
         self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
-        self.pushButton.clicked.connect(self.searchFriend)
+        self.pushButton.clicked.connect(self.select_func)
 
-    def showFriends(self):
+
+    def select_func(self):
+        msgBox = QMessageBox()
+        msgBox.setText("请选择操作")
+        msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
+        msgBox.button(QMessageBox.Yes).setText("添加好友")
+        msgBox.button(QMessageBox.No).setText("添加群聊")
+        msgBox.button(QMessageBox.Cancel).setText("创建群聊")
+        msgBox.show()
+        res = msgBox.exec_()
+        if res == QMessageBox.Yes:
+            self.searchFriend()
+        elif res == QMessageBox.No:
+            self.addGroup()
+        elif res == QMessageBox.Cancel:
+            self.createGroup()
+
+
+
+    def showFriendsAndGroups(self):
         """
         刷新一次好友列表
         :param username:
@@ -425,10 +457,13 @@ class Ui_Dialog(object):
         """
         _translate = QtCore.QCoreApplication.translate
         self.treeWidget_2.clear()
-        first_item0 = self.treeWidget_2.headerItem().setText(0, _translate("Dialog", "好友"))
-        # first_item0 = self.treeWidget_2.headerItem()
+        # first_item0 = self.treeWidget_2.headerItem().setText(0, _translate("Dialog", "好友"))
         first_item0 = QtWidgets.QTreeWidgetItem(self.treeWidget_2)
         first_item0.setText(0, _translate("Dialog", "好友"))
+
+        first_item1 = QtWidgets.QTreeWidgetItem(self.treeWidget_2)
+        first_item1.setText(0, _translate("Dialog", "群聊"))
+
         # 初始化所有的好友
         # 发送请求拿到所有的好友
         info_dict = {"type": "searchFriend", "username": self.username}
@@ -444,25 +479,43 @@ class Ui_Dialog(object):
                     self.data_list.pop(i_sub)
                     flag = 0
                     break
-        # info_str = json.dumps(info_dict)
-        # self.s.send(info_str.encode())
 
-        # 获取返回的信息
-        # recv_info = self.s.recv(self.bufferSize).decode('utf-8')
-        # friend_list = json.loads(recv_info)
         for friend in self.friends:
             item = QtWidgets.QTreeWidgetItem(first_item0)
             item.setText(0, _translate("Dialog", friend))
+
+        # 刷新群聊
+        info_dict = {"type": "searchGroupsByUser", "username": self.username}
+        get_id = sendMsg(self.s, "Initiative", info_dict)
+
+        # 循环从列表中查找有无我需要的数据,有就处理
+        flag = 1
+        while flag:
+            for i_sub, i in enumerate(self.data_list):
+                if get_id == i["id"]:
+                    get_info = json_util.loads(i['info'])
+                    self.groups = get_info['groups']
+                    self.data_list.pop(i_sub)
+                    flag = 0
+                    break
+
+        for group in self.groups:
+            item = QtWidgets.QTreeWidgetItem(first_item1)
+            item.setText(0, _translate("Dialog", group))
+
         self.treeWidget_2.clicked.connect(self.treeWidgetClicked)
 
     def treeWidgetClicked(self, item):
-        if item.data() != '好友':
+        # item = QtWidgets.QTreeWidgetItem()
+
+        if item.data() != '好友' and item.data() != "群聊":
             from chat import UiChat
             from chat import WidgetChat
             # QQ界面的widget
             friendUsername = item.data()
             self.widget_dict[friendUsername] = WidgetChat(self, friendUsername)
-            self.ui_dict[friendUsername] = (UiChat(self.s, friendUsername, self.username, self.data_list))
+            isGroup = True if item.parent().data() == "群聊" else False
+            self.ui_dict[friendUsername] = (UiChat(self.s, friendUsername, self.username, self.data_list, isGroup))
             self.ui_dict[friendUsername].setupUi(self.widget_dict[friendUsername])
             self.widget_dict[friendUsername].show()
 
@@ -471,6 +524,12 @@ class Ui_Dialog(object):
 
     def searchFriend(self):
         self.widget3.show()
+
+    def addGroup(self):
+        self.widget_groupSearch.show()
+
+    def createGroup(self):
+        self.widget_create_group.show()
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
@@ -549,4 +608,4 @@ class Ui_Dialog(object):
         self.msgRecvThread.start()
 
         # 刷新好友列表
-        self.showFriends()
+        self.showFriendsAndGroups()

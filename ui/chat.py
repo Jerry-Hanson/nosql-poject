@@ -1,6 +1,4 @@
-import json
 import re
-import typing
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
@@ -11,9 +9,9 @@ from utils.MsgUtils import sendMsg
 from ftp.dao.FTPDao import FTPDao
 from utils.ConfigFileReader import ConfigFileReader
 import pics
-import os
 
 import cv2  # 导入cv2
+
 """class RecvMsgThread(QThread):
 
     def __init__(self, s, ui):
@@ -65,11 +63,13 @@ class WidgetChat(QtWidgets.QWidget):
 
 class UiChat():
 
-    def __init__(self, s, sendname, myname, data_list):
+    def __init__(self, s, sendname, myname, data_list, isGroup):
         self.s = s
         self.sendname = sendname
         self.myname = myname
         self.data_list = data_list
+        self.isGroup = isGroup
+        # self.isGroup = isGroup  # 是否是群聊
 
         config = ConfigFileReader('../config/client_config.yaml')
         self.ftpDao = FTPDao(config.info['ftp_ip'],
@@ -216,8 +216,10 @@ class UiChat():
         self.textEdit.clear()
 
     def sendtoTcpserver(self, data):
+        send_type = "group" if self.isGroup else "personal"
         info_dict = {"type": "sendMessage", "sender": self.myname, "receiver": self.sendname, "msg": data,
-                     "time": self.time, "message_type": "str"}
+                     "time": self.time, "message_type": "str", "send_type": send_type}
+
         sendMsg(self.s, "passive", info_dict)
 
     def history_Message(self):  # 打开聊天的历史记录窗口
@@ -250,7 +252,7 @@ class UiChat():
         a, b = width, height
         if width > 500:
             a = 500
-            b = int(500/width*height)
+            b = int(500 / width * height)
         return b, a
 
     def write_Pic(self, res, name):
@@ -269,7 +271,8 @@ class UiChat():
     def showfileintextBrowser(self, filename):
         self.textBrowser.append(
             "<font color='red' style='position: absolute;right:0px'>" + self.myname + str(self.time) + "</font>")
-        self.textBrowser.append("<font color='red' style='position: absolute;right:0px'>[文件] </font>{}".format(filename))
+        self.textBrowser.append(
+            "<font color='red' style='position: absolute;right:0px'>[文件] </font>{}".format(filename))
 
     def sendpictoTcpserver(self, pic):
         info_dict = {"type": "sendMessage", "sender": self.myname, "receiver": self.sendname, "msg": pic.tolist(),
@@ -278,7 +281,7 @@ class UiChat():
 
     def uploadFileToFtp(self, file_path):
         file_basename = file_path.split('/')[-1]
-        self.ftpDao.upload(file_path,file_basename, self.sendname)
+        self.ftpDao.upload(file_path, file_basename, self.sendname)
 
     def sendFileMsgToTcpserver(self, file_path):
         file_basename = file_path.split('/')[-1]
@@ -286,7 +289,6 @@ class UiChat():
         info_dict = {'type': "sendFile", "sender": self.myname, "receiver": self.sendname, "msg": file_basename,
                      "time": self.time, "message_type": "file"}
         sendMsg(self.s, "passive", info_dict)
-
 
     def select_pic(self):
         openfile_name = QFileDialog.getOpenFileName(None, '选择文件', '', "Image Files(*.jpg *.jpeg *.png)")
@@ -318,7 +320,6 @@ class UiChat():
                              "time": self.time, "message_type": "file"}
                 sendMsg(self.s, "passive", info_dict)
 
-
     def file_func(self):
         msgBox = QMessageBox()
         msgBox.setText("请选择文件操作")
@@ -337,10 +338,9 @@ class UiChat():
             file_list = self.ftpDao.getFiles(self.myname)
             print(self.myname)
             print(self.sendname)
-            self.file_ui = Ui_FileWindow(file_list = file_list, ftp_dao = self.ftpDao, username = self.myname)
+            self.file_ui = Ui_FileWindow(file_list=file_list, ftp_dao=self.ftpDao, username=self.myname)
             self.file_ui.setupUi(self.file_widget)
             self.file_widget.show()
-
 
     def convert_send(self, sender, send_time, msg):
         # 向消息界面中添加一条文字消息
@@ -352,9 +352,6 @@ class UiChat():
         a, b, c = pic.shape
         a, b = self.reshapePic(a, b)
         res = cv2.resize(pic, (a, b))
-        Pic_name = str(sender)+".jpg"
+        Pic_name = str(sender) + ".jpg"
         self.write_Pic(res, Pic_name)
         self.showotherspic(Pic_name, sender, send_time)
-
-
-

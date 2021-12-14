@@ -52,8 +52,9 @@ class MsgRecvThread(QThread):
     """
     实时消息接收线程
     """
-    def __init__(self, s, parent_ui, data_list):
+    def __init__(self, s, parent_ui, data_list, username):
         self.s = s  # socket
+        self.username = username
         self.parent_ui = parent_ui  # 好友列表中的ui， 好友列表的ui同时控制着其他聊天窗口的ui和widget
         self.data_list = data_list
         super(MsgRecvThread, self).__init__()
@@ -71,19 +72,35 @@ class MsgRecvThread(QThread):
 
             #被动式接收数据
             else:
-
                 sender = recv_info['sender']
                 data = recv_info['data']
                 time = recv_info['time']
+
+                # 发送给群聊
+                send_type = recv_info['send_type'] # 是否是群聊的方式发送消息
                 print("sender", sender)
-                if sender in self.parent_ui.ui_dict.keys():
-                    if recv_info["message_type"] == "str":
-                        self.parent_ui.ui_dict[sender].convert_send(sender, time, data)
-                    elif recv_info["message_type"] == "pic":
-                        data = np.array(data)
-                        self.parent_ui.ui_dict[sender].convert_Picture(sender, time, data)
-                    elif recv_info["message_type"] == "file":
-                        self.parent_ui.ui_dict[sender].convert_send(sender, time, data)
-                        pass
+                if send_type == "personal":
+                    if sender in self.parent_ui.ui_dict.keys():
+                        if recv_info["message_type"] == "str":
+                            self.parent_ui.ui_dict[sender].convert_send(sender, time, data)
+                        elif recv_info["message_type"] == "pic":
+                            data = np.array(data)
+                            self.parent_ui.ui_dict[sender].convert_Picture(sender, time, data)
+                        elif recv_info["message_type"] == "file":
+                            self.parent_ui.ui_dict[sender].convert_send(sender, time, data)
+                            pass
+                elif send_type == "group":
+                    group_name = recv_info['group_name']
+                    if group_name in self.parent_ui.ui_dict.keys() and sender != self.username:
+                        if recv_info["message_type"] == "str":
+                            self.parent_ui.ui_dict[group_name].convert_send(sender, time, data)
+                        elif recv_info["message_type"] == "pic":
+                            data = np.array(data)
+                            self.parent_ui.ui_dict[group_name].convert_Picture(sender, time, data)
+                        elif recv_info["message_type"] == "file":
+                            self.parent_ui.ui_dict[group_name].convert_send(sender, time, data)
+                            pass
+
+
 
 
