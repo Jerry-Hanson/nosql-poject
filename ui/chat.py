@@ -287,7 +287,7 @@ class UiChat():
         file_basename = file_path.split('/')[-1]
 
         info_dict = {'type': "sendFile", "sender": self.myname, "receiver": self.sendname, "msg": file_basename,
-                     "time": self.time, "message_type": "file"}
+                     "time": self.time, "message_type": "file", "send_type":"personal"} # 现在还只支持单人发送文件
         sendMsg(self.s, "passive", info_dict)
 
     def select_pic(self):
